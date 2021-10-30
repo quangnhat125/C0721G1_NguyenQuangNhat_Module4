@@ -45,4 +45,9 @@ public class CustomerServiceImp implements ICustomerService{
     public void remove(int id) {
         customers.remove(id);
     }
+
+    @Override
+    public List<Customer> search(Customer customer) {
+        return null;
+    }
 }

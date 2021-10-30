@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/layout::header"></head>
+
+<body>
+<div class="notify">
+    <div th:if="${success}">
+        <span th:text="${success}"></span>
+    </div>
+</div>
+<a th:href="@{/product/create}">Add new product</a>
+<table id="productList">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Company</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
+    <tr th:each="product: ${productList}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.productName}"></td>
+        <td th:text="${product.productPrice}"></td>
+        <td th:text="${product.productCompany}"></td>
+        <td>
+            <a th:href="@{/product/edit/{id}(id=${product.id})}"/>
+            <button class="btn btn-primary" type="button">Edit
+            </button>
+            </a> </td>
+        <td>
+            <a th:href="@{/product/delete/{id}(id=${product.id})}"/>
+            <button class="btn btn-primary" type="button">Delete
+            </button>
+            </a>
+        </td>
+    </tr>
+
+</table>
+</body>
+</html>

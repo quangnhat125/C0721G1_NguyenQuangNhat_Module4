@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/layout::header"></head>
+<body>
+<h1>Edit Product</h1>
+<form th:action="@{/product/update}" th:object="${product}" method="post">
+    <input type="hidden" th:field="*{id}" th:value="*{id}">
+    <div>
+        <label for="name">Name Product:</label>
+        <input id="name" type="text" th:field="*{productName}">
+    </div>
+    <div>
+        <label>Price Product:</label>
+        <select th:field="*{productPrice}">
+            <option th:each="i : ${#numbers.sequence(1, 100)}" th:value="${i}" th:text="${i}">
+            </option>
+        </select>
+    </div>
+    <div>
+        <label for="company">Company's Product:</label>
+        <input id="company" type="text" th:field="*{productCompany}">
+    </div>
+    <input style="color: red" type="submit" value="Update" >
+
+</form>
+</body>
+</html>
