@@ -64,6 +64,4 @@ public class ProductController {
         model.addAttribute("success", "Update Completed!");
         return "index";
     }
-
-
 }
