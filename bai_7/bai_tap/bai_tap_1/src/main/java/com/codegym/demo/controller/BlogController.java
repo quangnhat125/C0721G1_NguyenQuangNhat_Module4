@@ -5,12 +5,17 @@ import com.codegym.demo.model.Category;
 import com.codegym.demo.service.IBlogService;
 import com.codegym.demo.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.jws.WebParam;
+import java.sql.Date;
 import java.util.List;
 
 @Controller
@@ -28,9 +33,14 @@ public class BlogController {
     IBlogService blogService;
 
     @GetMapping("")
-    public ModelAndView listBlog() {
-        List<Blog> blogList = blogService.findAll();
+    public ModelAndView listBlog(
+            @PageableDefault(value = 5, sort = "date", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "searchTitle", defaultValue = "", required = false) String searchTitle,
+            @RequestParam(value = "idCategory", defaultValue = "", required = false) String idCategory) {
+        Page<Blog> blogList = blogService.searchAll(pageable, searchTitle, idCategory);
         ModelAndView modelAndView = new ModelAndView("/blog/index");
+        modelAndView.addObject("searchTitle", searchTitle);
+        modelAndView.addObject("idCategory", idCategory);
         modelAndView.addObject("blogList", blogList);
         return modelAndView;
     }
@@ -45,10 +55,11 @@ public class BlogController {
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute Blog blog) {
+    public ModelAndView save(@ModelAttribute Blog blog, @PageableDefault(value = 5) Pageable pageable) {
+        blog.setDate(new Date(System.currentTimeMillis()));
         blogService.save(blog);
         ModelAndView modelAndView = new ModelAndView("/blog/index");
-        List<Blog> blogList = blogService.findAll();
+        Page<Blog> blogList = blogService.findAll(pageable);
         modelAndView.addObject("blogList", blogList);
         modelAndView.addObject("message", "Add Completed!");
         return modelAndView;
@@ -72,11 +83,12 @@ public class BlogController {
         modelAndView.addObject("message", "Update Completed!");
         return modelAndView;
     }
+
     @GetMapping("/delete/{id}")
-    public ModelAndView delete(@PathVariable Long id){
+    public ModelAndView delete(@PathVariable Long id) {
         blogService.deleteBlog(id);
         List<Blog> blogList = blogService.findAll();
-        ModelAndView modelAndView =  new ModelAndView("/blog/index");
+        ModelAndView modelAndView = new ModelAndView("/blog/index");
         modelAndView.addObject("blogList", blogList);
         modelAndView.addObject("message", "Deleted Completed!");
         return modelAndView;

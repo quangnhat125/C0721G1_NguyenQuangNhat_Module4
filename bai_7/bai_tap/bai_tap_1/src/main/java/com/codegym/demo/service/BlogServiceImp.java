@@ -3,9 +3,12 @@ package com.codegym.demo.service;
 import com.codegym.demo.model.Blog;
 import com.codegym.demo.repository.IBlogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public class BlogServiceImp implements IBlogService {
     @Autowired
@@ -14,6 +17,11 @@ public class BlogServiceImp implements IBlogService {
     @Override
     public List<Blog> findAll() {
         return iBlogRepository.findAll();
+    }
+
+    @Override
+    public Page<Blog> findAll(Pageable pageable) {
+        return iBlogRepository.findAll(pageable);
     }
 
     @Override
@@ -36,5 +44,10 @@ public class BlogServiceImp implements IBlogService {
     @Override
     public Blog findById(Long id) {
         return iBlogRepository.findById(id).get();
+    }
+
+    @Override
+    public Page<Blog> searchAll(Pageable pageable, String searchTitle, String idCategory) {
+        return iBlogRepository.searchAll(pageable, "%" + searchTitle + "%", "%" + idCategory + "%");
     }
 }
