@@ -37,6 +37,7 @@ public class BlogController {
             @PageableDefault(value = 5, sort = "date", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(value = "searchTitle", defaultValue = "", required = false) String searchTitle,
             @RequestParam(value = "idCategory", defaultValue = "", required = false) String idCategory) {
+
         Page<Blog> blogList = blogService.searchAll(pageable, searchTitle, idCategory);
         ModelAndView modelAndView = new ModelAndView("/blog/index");
         modelAndView.addObject("searchTitle", searchTitle);
