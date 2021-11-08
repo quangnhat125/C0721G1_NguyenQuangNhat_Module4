@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/customer/layout :: head"></head>
+<body>
+<div th:replace="/customer/layout :: navbar"></div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Customer Code</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Birthday</th>
+        <th scope="col">Gender</th>
+        <th scope="col">ID Card</th>
+        <th scope="col">Phone Number</th>
+        <th scope="col">Customer Type</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="customer : ${customer}">
+        <td th:text="${customer.customerCode}"></td>
+        <td th:text="${customer.customerName}"></td>
+        <td th:text="${customer.customerBirthday}"></td>
+        <td th:if="${customer.gender==0}" th:text="Female"></td>
+        <td th:if="${customer.gender==1}" th:text="Male"></td>
+        <td th:if="${customer.gender==2}" th:text="LGBT"></td>
+        <td th:text="${customer.idCard}"></td>
+        <td th:text="${customer.phoneNumber}"></td>
+        <td th:text="${customer.customer_type.customerType}"></td>
+        <td>
+            <a th:href="@{/customer/edit/{id}(id=${customer.id})}"/>
+            <button class="btn btn-primary" type="button">Edit
+            </button>
+            </a>
+        </td>
+        <td>
+            <a th:href="@{/customer/delete/{id}(id=${customer.id})}"/>
+            <button class="btn btn-primary" type="button">Delete
+            </button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div th:replace="/customer/layout :: script"></div>
+<script>
+    function onDelete(id) {
+        document.getElementById("idCustomer").value = id;
+    }
+
+    function onSearch() {
+        let a = document.getElementById("select").value;
+        document.getElementById("idSearch").value = a;
+    }
+
+    $(document).ready(function () {
+        $('#tableCustomer').dataTable({
+            "dom": 'lrtip',
+            "lengthChange": false,
+            "pageLength": 5
+        });
+    });
+
+    $('#exampleModal').on('show.bs.modal', event => {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+    });
+</script>
+</body>
+</html>
