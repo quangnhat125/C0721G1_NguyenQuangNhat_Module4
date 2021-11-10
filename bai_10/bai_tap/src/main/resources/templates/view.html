@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1> VIEW PRODUCT</h1>
+<div>
+    <a href="/shopping-cart">Back To Cart</a>
+    <a href="/shop">Back Shop</a>
+</div>
+<div>
+    <p>Product Code: </p>
+    <p th:text="${product.code}"></p>
+    <p>Product Name: </p>
+    <p th:text="${product.name}"></p>
+    <p>Price: </p>
+    <p th:text="${product.price}"></p>
+
+</div>
+<div th:replace="/layout :: script"></div>
+</body>
+</html>
