@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/blog/save}" th:object="${blog}" method="post">
+    <div>
+        <label for="blogTitle">Blog Title:</label>
+        <input id="blogTitle" type="text" th:field="*{blogTitle}">
+    </div>
+    <div>
+        <label for="blogHead">Blog Head:</label>
+        <input id="blogHead" type="text" th:field="*{bloghead}">
+    </div>
+    <div>
+        <label for="blogContent">Blog Content:</label>
+        <input id="blogContent" type="text" th:field="*{blogcontent}">
+    </div>
+    <div>
+        <label>Blog Category:</label>
+        <select th:field="*{category.id}"/>
+        <option th:each="c : ${categoryList}" th:text="${c.categoryName}" th:value="${c.id}"></option>
+    </div>
+    <input type="submit" value="Create">
+</form>
+</body>
+</html>
