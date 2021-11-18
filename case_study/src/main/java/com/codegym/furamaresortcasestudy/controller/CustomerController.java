@@ -49,7 +49,6 @@ public class CustomerController {
     public ModelAndView save(@ModelAttribute @Validated CustomerDto customerDto, BindingResult bindingResult, @PageableDefault(value = 5) Pageable pageable) {
         ModelAndView modelAndView = new ModelAndView("/customer/index");
         List<Customer> customerList = customerService.findAll();
-        new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasFieldErrors()) {
             return modelAndView;
         } else{
