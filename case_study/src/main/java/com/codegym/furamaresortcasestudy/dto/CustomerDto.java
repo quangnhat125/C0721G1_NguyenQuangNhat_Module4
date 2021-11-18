@@ -1,56 +1,30 @@
-package com.codegym.furamaresortcasestudy.model;
+package com.codegym.furamaresortcasestudy.dto;
 
-import org.springframework.context.annotation.EnableMBeanExport;
+import com.codegym.furamaresortcasestudy.model.CustomerType;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 
-@Entity
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class  CustomerDto implements Validator {
     private Long id;
+    @Pattern(regexp = "^[K][H][-]\\d{4}", message = "Please enter the correct format for customer code 'KH-XXXX' !")
     private String customerCode;
     private String customerName;
     private String customerBirthday;
     private int gender;
+    @Pattern(regexp = "\\d{9}",message = "Please enter the correct format for id card which is 9-digit string !")
     private String idCard;
+    @Pattern(regexp = "\\d{10}",message ="Please enter the correct format for phone number which is 10-digit string !" )
     private String phoneNumber;
     private String customerEmail;
     private String customerAddress;
-    @ManyToOne
-    @JoinColumn(name = "customer_type_id", referencedColumnName = "id")
     private CustomerType customer_type;
 
-    public Customer() {
-    }
-
-    public Customer(Long id, String customerCode, String customerName, String customerBirthday,
-                    int gender, String idCard, String phoneNumber, String customerEmail,
-                    String customerAddress, CustomerType customer_type) {
-        this.id = id;
-        this.customerCode = customerCode;
-        this.customerName = customerName;
-        this.customerBirthday = customerBirthday;
-        this.gender = gender;
-        this.idCard = idCard;
-        this.phoneNumber = phoneNumber;
-        this.customerEmail = customerEmail;
-        this.customerAddress = customerAddress;
-        this.customer_type = customer_type;
-    }
-
-    public Customer(String customerCode, String customerName, String customerBirthday, int gender, String idCard,
-                    String phoneNumber, String customerEmail, String customerAddress, CustomerType customer_type) {
-        this.customerCode = customerCode;
-        this.customerName = customerName;
-        this.customerBirthday = customerBirthday;
-        this.gender = gender;
-        this.idCard = idCard;
-        this.phoneNumber = phoneNumber;
-        this.customerEmail = customerEmail;
-        this.customerAddress = customerAddress;
-        this.customer_type = customer_type;
+    public CustomerDto() {
     }
 
     public Long getId() {
@@ -109,14 +83,6 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public CustomerType getCustomer_type() {
-        return customer_type;
-    }
-
-    public void setCustomer_type(CustomerType customer_type) {
-        this.customer_type = customer_type;
-    }
-
     public String getCustomerEmail() {
         return customerEmail;
     }
@@ -131,5 +97,23 @@ public class Customer {
 
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
+    }
+
+    public CustomerType getCustomer_type() {
+        return customer_type;
+    }
+
+    public void setCustomer_type(CustomerType customer_type) {
+        this.customer_type = customer_type;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
     }
 }

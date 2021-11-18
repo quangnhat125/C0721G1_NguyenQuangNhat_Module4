@@ -14,6 +14,8 @@
         <th scope="col">Gender</th>
         <th scope="col">ID Card</th>
         <th scope="col">Phone Number</th>
+        <th scope="col">Email</th>
+        <th scope="col">Address</th>
         <th scope="col">Customer Type</th>
         <th scope="col">Edit</th>
         <th scope="col">Delete</th>
@@ -29,6 +31,8 @@
         <td th:if="${customer.gender==2}" th:text="LGBT"></td>
         <td th:text="${customer.idCard}"></td>
         <td th:text="${customer.phoneNumber}"></td>
+        <td th:text="${customer.customerEmail}"></td>
+        <td th:text="${customer.customerAddress}"></td>
         <td th:text="${customer.customer_type.customerType}"></td>
         <td>
             <a th:href="@{/customer/edit/{id}(id=${customer.id})}"/>
@@ -45,31 +49,38 @@
     </tr>
     </tbody>
 </table>
+<div>
+    <a th:href="@{'/customer'(page = ${customer.number - 1})}"
+       th:if="${customer.hasPrevious()}">Previous Page</a>
+    <span th:text="${customer.number + 1}"></span> / <span th:text="${customer.totalPages}"></span>
+    <a th:href="@{'/customer'(page = ${customer.number + 1})}"
+       th:if="${customer.hasNext()}">Next Page</a>
+</div>
 
 
 <div th:replace="/customer/layout :: script"></div>
-<script>
-    function onDelete(id) {
-        document.getElementById("idCustomer").value = id;
-    }
+<!--<script>-->
+<!--    function onDelete(id) {-->
+<!--        document.getElementById("idCustomer").value = id;-->
+<!--    }-->
 
-    function onSearch() {
-        let a = document.getElementById("select").value;
-        document.getElementById("idSearch").value = a;
-    }
+<!--    function onSearch() {-->
+<!--        let a = document.getElementById("select").value;-->
+<!--        document.getElementById("idSearch").value = a;-->
+<!--    }-->
 
-    $(document).ready(function () {
-        $('#tableCustomer').dataTable({
-            "dom": 'lrtip',
-            "lengthChange": false,
-            "pageLength": 5
-        });
-    });
+<!--    $(document).ready(function () {-->
+<!--        $('#tableCustomer').dataTable({-->
+<!--            "dom": 'lrtip',-->
+<!--            "lengthChange": false,-->
+<!--            "pageLength": 5-->
+<!--        });-->
+<!--    });-->
 
-    $('#exampleModal').on('show.bs.modal', event => {
-        var button = $(event.relatedTarget);
-        var modal = $(this);
-    });
-</script>
+<!--    $('#exampleModal').on('show.bs.modal', event => {-->
+<!--        var button = $(event.relatedTarget);-->
+<!--        var modal = $(this);-->
+<!--    });-->
+<!--</script>-->
 </body>
 </html>

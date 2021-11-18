@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="/customer/layout :: head">
-    <title>ADD NEW CUSTOMER</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
 <div th:replace="/customer/layout :: navbar"></div>
-<h1 align="center">ADD NEW CUSTOMER FORM</h1>
 <div align="center">
-    <form th:action="@{/customer/save}" th:object="${customer}" method="post">
+    <form th:action="@{/customer/update}" th:object="${customer}" method="post">
         <table border="1" cellpadding="5">
+            <tr>
+                <input type="hidden" th:field="*{id}" th:value="*{id}">
+            </tr>
             <tr>
                 <th>Customer Code</th>
                 <td>
@@ -68,23 +71,20 @@
                 <td>
                     <select th:field="*{customer_type}" class="form-select" name="customer_type_id"
                             aria-label="Default select example" required>
-                        <option th:each="type : ${customerType}" th:text="${type.customerType}" th:value="${type.id}"></option>
+                        <option th:each="type : ${customerType}" th:text="${type.customerType}"
+                                th:value="${type.id}"></option>
                         </th:each>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
-                    <input class="bg-success" type="submit" value="Create"/>
+                    <input class="bg-success" type="submit" value="Update"/>
                 </td>
             </tr>
-
-
         </table>
-
     </form>
 </div>
-
 <div th:replace="/customer/layout :: script"></div>
 </body>
 </html>
