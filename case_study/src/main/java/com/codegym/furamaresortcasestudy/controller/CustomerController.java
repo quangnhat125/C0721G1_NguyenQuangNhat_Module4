@@ -15,7 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.jws.WebParam;
+
+import java.sql.Date;
 import java.util.List;
 
 @Controller
@@ -25,17 +26,20 @@ public class CustomerController {
     ICustomerTypeService customerTypeService;
     @Autowired
     ICustomerService customerService;
+
     @ModelAttribute("customerTypeList")
     public Iterable<CustomerType> showListCustomerType() {
         return customerTypeService.findAll();
     }
+
     @GetMapping("")
-    public ModelAndView showListCustomer(@PageableDefault(value = 5)Pageable pageable){
+    public ModelAndView showListCustomer(@PageableDefault(value = 5) Pageable pageable) {
         Page<Customer> customerPage = customerService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/customer/index");
         modelAndView.addObject("customer", customerPage);
         return modelAndView;
     }
+
     @GetMapping("/create")
     public ModelAndView showCreateCustomerForm() {
         CustomerDto customerDto = new CustomerDto();
@@ -45,21 +49,29 @@ public class CustomerController {
         modelAndView.addObject("customerType", customerTypeList);
         return modelAndView;
     }
+
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute @Validated CustomerDto customerDto, BindingResult bindingResult, @PageableDefault(value = 5) Pageable pageable) {
+    public ModelAndView save(@ModelAttribute @Validated Customer customer, BindingResult bindingResult, @PageableDefault(value = 5) Pageable pageable) {
+//        ModelAndView modelAndView = new ModelAndView("/customer/index");
+//        List<Customer> customerList = customerService.findAll();
+//        if (bindingResult.hasFieldErrors()) {
+//            return modelAndView;
+//        } else{
+//            Customer customer = new Customer();
+//            customerService.save(customer);
+//            modelAndView.addObject("customer", customerDto);
+//            modelAndView.addObject("success", "Create customer successfully !");
+//        }
+//        return modelAndView;
+        customerService.save(customer);
         ModelAndView modelAndView = new ModelAndView("/customer/index");
-        List<Customer> customerList = customerService.findAll();
-        if (bindingResult.hasFieldErrors()) {
-            return modelAndView;
-        } else{
-            Customer customer = new Customer();
-            customerService.save(customer);
-            modelAndView.addObject("customer", customerDto);
-            modelAndView.addObject("success", "Create customer successfully !");
-        }
+        Page<Customer> customerList = customerService.findAll(pageable);
+        modelAndView.addObject("blogList", customerList);
+        modelAndView.addObject("message", "Add Completed!");
         return modelAndView;
 
     }
+
     @GetMapping("/edit/{id}")
     public ModelAndView edit(@PathVariable Long id) {
         List<CustomerType> customerType = customerTypeService.findAll();
@@ -68,6 +80,7 @@ public class CustomerController {
         modelAndView.addObject("customer", customerService.findById(id));
         return modelAndView;
     }
+
     @PostMapping("/update")
     public ModelAndView update(@ModelAttribute Customer customer) {
         customerService.update(customer);
@@ -77,6 +90,7 @@ public class CustomerController {
         modelAndView.addObject("message", "Update Completed!");
         return modelAndView;
     }
+
     @GetMapping("/delete/{id}")
     public ModelAndView delete(@PathVariable Long id) {
         customerService.deleteCustomer(id);

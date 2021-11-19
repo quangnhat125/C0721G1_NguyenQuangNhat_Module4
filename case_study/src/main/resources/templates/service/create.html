@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/service/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/service/layout :: navbar"></div>
+<h1 align="center">ADD NEW SERVICE FORM</h1>
+<div align="center">
+    <form th:action="@{/service/save}" th:object="${service}" method="post">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Service Code</th>
+                <td>
+                    <input type="text" id="serviceCode" th:field="*{serviceCode}" size="15" required/>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('customerCode')}" th:errors="*{customerCode}">Customer Code Error</td>-->
+            </tr>
+            <tr>
+                <th>Service Name:</th>
+                <td>
+                    <input type="text" th:field="*{serviceName}" id="name" size="45" required/>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Customer Name Error</td>-->
+            </tr>
+            <tr>
+                <th>Service Area:</th>
+                <td>
+                    <input type="text" th:field="*{serviceArea}" id="area" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Service Cost:</th>
+                <td>
+                    <input type="text" th:field="*{serviceCost}" id="cost" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Max People:</th>
+                <td>
+                    <input type="text" th:field="*{serviceMaxPeople}" id="maxPeople" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Rent Type:</th>
+                <td>
+                    <select th:field="*{rent_type}" class="form-select" name="customer_type_id"
+                            aria-label="Default select example" required>
+                        <option th:each="type : ${rentTypeList}" th:text="${type.rentTypeName}"
+                                th:value="${type.id}"></option>
+                        </th:each>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Service Type:</th>
+                <td>
+                    <select th:field="*{service_type}" class="form-select" name="service_type"
+                            aria-label="Default select example" required>
+                        <option th:each="type : ${serviceTypeList}" th:text="${type.serviceTypeName}"
+                                th:value="${type.id}"></option>
+                        </th:each>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Standard Room:</th>
+                <td>
+                    <input type="text" th:field="*{standardRoom}" id="standardRoom" size="45" required/>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}">ID Card Error</td>-->
+            </tr>
+            <tr>
+                <th>Description:</th>
+                <td>
+                    <input type="text" th:field="*{description}" id="description" size="45" required/>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone Number Error</td>-->
+            </tr>
+            <tr>
+                <th>Pool Area:</th>
+                <td>
+                    <input type="text" th:field="*{poolArea}" id="pool" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Number Of Floor:</th>
+                <td>
+                    <input type="text" th:field="*{numberFloor}" id="floor" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input class="bg-success" type="submit" value="Create"/>
+                </td>
+            </tr>
+
+
+        </table>
+
+    </form>
+</div>
+
+<div th:replace="/service/layout :: script"></div>
+</body>
+</html>

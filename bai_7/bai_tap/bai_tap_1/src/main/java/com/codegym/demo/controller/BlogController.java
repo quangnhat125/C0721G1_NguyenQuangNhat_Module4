@@ -51,7 +51,6 @@ public class BlogController {
         ModelAndView modelAndView = new ModelAndView("/blog/create");
         List<Category> categoryList = iCategoryService.findAll();
         modelAndView.addObject("blog", new Blog());
-        git add
         return modelAndView;
     }
 

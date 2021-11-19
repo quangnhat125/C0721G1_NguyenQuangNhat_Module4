@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/employee/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/employee/layout :: navbar"></div>
+<h1 align="center">ADD NEW EMPLOYEE FORM</h1>
+<div align="center">
+    <form th:action="@{/employee/save}" th:object="${employee}" method="post">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Employee Name</th>
+                <td>
+                    <input type="text" id="employeeName" th:field="*{employeeName}" size="15" required/>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('customerCode')}" th:errors="*{customerCode}">Customer Code Error</td>-->
+            </tr>
+            <tr>
+                <th>Employee Birthday:</th>
+                <td>
+                    <input type="date" th:field="*{employeeBirthday}" id="birthday" size="45" required/>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Customer Name Error</td>-->
+            </tr>
+            <tr>
+                <th>ID Card:</th>
+                <td>
+                    <input type="text" th:field="*{idCard}" id="idCard" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Salary:</th>
+                <td>
+                    <input type="text" th:field="*{salary}" id="salary" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Phone Number:</th>
+                <td>
+                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Email:</th>
+                <td>
+                    <input type="text" th:field="*{email}" id="email" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Address:</th>
+                <td>
+                    <input type="text" th:field="*{address}" id="address" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Position:</th>
+                <td>
+                    <select th:field="*{position}" class="form-select" name="customer_type_id"
+                            aria-label="Default select example" required>
+                        <option th:each="position : ${positionList}" th:text="${position.positionName}"
+                                th:value="${position.id}"></option>
+                        </th:each>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Education Degree:</th>
+                <td>
+                    <select th:field="*{education}" class="form-select" name="customer_type_id"
+                            aria-label="Default select example" required>
+                        <option th:each="type : ${educationList}" th:text="${type.educationName}"
+                                th:value="${type.id}"></option>
+                        </th:each>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Division:</th>
+                <td>
+                    <select th:field="*{division}" class="form-select" name="customer_type_id"
+                            aria-label="Default select example" required>
+                        <option th:each="type : ${divisionList}" th:text="${type.divisionName}"
+                                th:value="${type.id}"></option>
+                        </th:each>
+                    </select>
+                </td>
+            </tr>
+            <td colspan="2" align="center">
+                <input class="bg-success" type="submit" value="Create"/>
+            </td>
+            </tr>
+
+
+        </table>
+
+    </form>
+</div>
+
+
+<div th:replace="/employee/layout :: script"></div>
+</body>
+</html>

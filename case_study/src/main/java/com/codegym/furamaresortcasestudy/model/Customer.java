@@ -12,6 +12,7 @@ public class Customer {
     private Long id;
     private String customerCode;
     private String customerName;
+    @Column(columnDefinition = "Date")
     private String customerBirthday;
     private int gender;
     private String idCard;
