@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--    <script-->
+    <!--            src="https://code.jquery.com/jquery-3.6.0.min.js"-->
+    <!--            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="-->
+    <!--            crossorigin="anonymous">-->
+    <!--    </script>-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+          integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="/assert/bootstrap413/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assert/datatables/css/dataTables.bootstrap4.min.css">
+</head>
+<body onload="zeroPage()">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<table id="listProduct">
+</table>
+<button onclick="showModalCreate()">Add Product</button>
+<button onclick="showModalSearch()">Search</button>
+<button onclick="showMore()">Show More</button>
+<button onclick="searchProduct()">Show List</button>
+<br>
+<!--<ul class="pagination">-->
+<!--    <li class="page-item"><a class="page-link" th:if="${page}!=0"-->
+<!--                             th:href="@{'/api/home'(page=${page}-1)}">Previous</a></li>-->
+<!--    <li class="page-item"><a class="page-link" th:href="@{'/api/home'(page=${page })}"><span-->
+<!--            th:text="${page}+1"></span>/<span th:text="${total}"></span></a></li>-->
+<!--    <li class="page-item"><a class="page-link" th:if="${page}<${total}"-->
+<!--                             th:href="@{'/api/home'(page=${page} +1)}">Next</a></li>-->
+<!--    <li class="page-item"><a class="page-link" th:href="@{'/api/home'(page=${total})}">Last-->
+<!--        Page</a></li>-->
+<!--</ul>-->
+<button id="previousPage" onclick="previous()">Previous</button>
+<button><span id="pageNumber">
+</span></button>
+<button id="nextPage" onclick="next()">Next</button>
+<input type="hidden" id="page">
+<input type="hidden" id="totalPage" th:value="${totalpage}">
+<!-- Button trigger modal -->
+<!-- Modal -->
+<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" placeholder="Enter Product Name"/>
+                <br>
+                <label for="price">Product Price</label>
+                <input type="text" id="price" placeholder="Enter Product Price"/>
+                <br>
+                <label for="description">Product Description</label>
+                <input type="text" id="description" placeholder="Enter Product Description"/>
+                <br>
+                <label for="producer">Producer</label>
+                <input type="text" id="producer" placeholder="Enter Producer"/>
+                <br>
+                <label>Category List</label>
+                <select id="category_id">
+                    <option th:each="cate : ${category}" th:text="${cate.name}" th:value="${cate.id}">
+                    </option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideModalCreate()" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
+                <button onclick="createProduct()" ype="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal EDIT-->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal Edit</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="productId">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productNameEdit" placeholder="Enter Product Name"/>
+                <br>
+                <label for="price">Product Price</label>
+                <input type="text" id="priceEdit" placeholder="Enter Product Price"/>
+                <br>
+                <label for="description">Product Description</label>
+                <input type="text" id="descriptionEdit" placeholder="Enter Product Description"/>
+                <br>
+                <label for="producer">Producer</label>
+                <input type="text" id="producerEdit" placeholder="Enter Producer"/>
+                <br>
+                <label>Category List</label>
+                <select id="category_id_edit">
+                    <option th:each="cate : ${category}" th:text="${cate.name}" th:value="${cate.id}">
+                    </option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideModalEdit()" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
+                <button onclick="update()" type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal DELETE-->
+<div class="modal fade" id="modalDelete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="deleteId">
+                Are you sure for deleting?
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideModalDelete()" type="button" class="btn btn-secondary" data-dismiss="modal">No
+                </button>
+                <button onclick="del()" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal SEARCH -->
+<div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="productId">Product ID</label>
+                <input type="text" id="productIdSearch">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productNameSearch" placeholder="Enter Product Name"/>
+                <br>
+                <label for="price">Product Price</label>
+                <input type="text" id="priceSearch" placeholder="Enter Product Price"/>
+                <br>
+                <label for="description">Product Description</label>
+                <input type="text" id="descriptionSearch" placeholder="Enter Product Description"/>
+                <br>
+                <label for="producer">Producer</label>
+                <input type="text" id="producerSearch" placeholder="Enter Producer"/>
+                <br>
+                <label>Category List</label>
+                <select id="category_id_search">
+                    <option value="">None</option>
+                    <option th:each="cate : ${category}" th:text="${cate.name}" th:value="${cate.id}">
+                    </option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button onclick="hideModalSearch()" type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                </button>
+                <button onclick="searchProduct()" type="button" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    function hideModalSearch() {
+        $('#modalSearch').modal('hide');
+    }
+
+    function showModalSearch() {
+        $('#modalSearch').modal('show');
+    }
+
+    function hideModalDelete() {
+        $('#modalDelete').modal('hide');
+    }
+
+    function showModalDelete() {
+
+        $('#modalDelete').modal('show');
+    }
+
+    function hideModalEdit() {
+        $('#modalEdit').modal('hide');
+    }
+
+    function showModalEdit() {
+        $('#modalEdit').modal('show');
+    }
+
+    function createProduct() {
+        let productName = document.getElementById("productName").value;
+        let price = document.getElementById("price").value;
+        let des = document.getElementById("description").value;
+        let producer = document.getElementById("producer").value;
+        let id = document.getElementById("category_id").value;
+        let json = {"productName": productName, "price": price, "description": des, "producer": producer}
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "POST",
+            data: JSON.stringify(json),
+            url: "/api/create/" + id,
+            success: function () {
+                alert("Add Completed!")
+                hideModalCreate();
+                getList();
+            },
+            error: function (err) {
+
+            }
+        })
+    }
+
+    function showModalCreate() {
+        $('#create').modal('show');
+    }
+
+    function hideModalCreate() {
+        $('#create').modal('hide');
+    }
+
+    // function getList() {
+    //     $.ajax({
+    //         headers: {
+    //             'Accept': "application/json",
+    //             'Content-Type': "application/json"
+    //         },
+    //         type: "GET",
+    //         // data: JSON.stringify(),
+    //         url: "/api/list",
+    //         success: function (productList) {
+    //             let content = '<tr><th>ID</th> <th>Name</th> <th>Price</th> <th>Description</th> <th>Producer</th> <th>Category</th> <th>Edit</th> <th>Delete</th></tr>'
+    //             for (let i = 0; i < productList.length; i++) {
+    //                 content += getProduct(productList[i])
+    //             }
+    //             document.getElementById('listProduct').innerHTML = content
+    //         },
+    //         error: function (err) {
+    //
+    //         }
+    //     })
+    // }
+
+    function getProduct(product) {
+        return `<tr><th>${product.id}</th> <th>${product.productName}</th> <th>${product.price}</th> <th>${product.description}</th>
+                   <th>${product.producer}</th> <th>${product.category.name}</th> <th><button onclick="edit(${product.id})">Edit</button></th> <th><button onclick="deleteProduct(${product.id})">Delete</button></th></tr>`
+    }
+
+    function deleteProduct(id) {
+        document.getElementById("deleteId").value = id
+        showModalDelete()
+    }
+
+    function del() {
+        let id = document.getElementById("deleteId").value;
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "POST",
+            // data: JSON.stringify(),
+            url: "/api/delete/" + id,
+            success: function () {
+                hideModalDelete()
+                getList()
+            },
+            error: function (err) {
+
+            }
+        })
+
+    }
+
+    function edit(id) {
+
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "POST",
+            // data: JSON.stringify(),
+            url: "/api/edit/" + id,
+            success: function (product) {
+
+                document.getElementById("productId").value = product.id
+                document.getElementById("productNameEdit").value = product.productName
+                document.getElementById("priceEdit").value = product.price
+                document.getElementById("descriptionEdit").value = product.description
+                document.getElementById("producerEdit").value = product.producer
+                document.getElementById("category_id_edit").value = product.category.id
+                showModalEdit()
+            },
+            error: function (err) {
+
+            }
+        })
+    }
+
+    function update() {
+        let productId = document.getElementById("productId").value;
+        let productName = document.getElementById("productNameEdit").value;
+        let price = document.getElementById("priceEdit").value;
+        let des = document.getElementById("descriptionEdit").value;
+        let producer = document.getElementById("producerEdit").value;
+        let id = document.getElementById("category_id_edit").value;
+        console.log(id)
+        let json = {
+            "id": productId,
+            "productName": productName,
+            "price": price,
+            "description": des,
+            "producer": producer
+        }
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "POST",
+            data: JSON.stringify(json),
+            url: "/api/update/" + id,
+            success: function () {
+                hideModalEdit()
+                getList()
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    function searchProduct() {
+        let productId = document.getElementById("productIdSearch").value;
+        let productName = document.getElementById("productNameSearch").value;
+        let price = document.getElementById("priceSearch").value;
+        let des = document.getElementById("descriptionSearch").value;
+        let producer = document.getElementById("producerSearch").value;
+        let id = document.getElementById("category_id_search").value;
+        let page = document.getElementById('page').value;
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "POST",
+            url: "/api/search?pId=" + productId + "&pName=" + productName + "&pPrice=" + price + "&pDes=" + des + "&pProducer=" + producer + "&cateId=" + id + "&page=" + page,
+            success: function (productList) {
+                hideModalSearch()
+                let content = '<tr><th>ID</th> <th>Name</th> <th>Price</th> <th>Description</th> <th>Producer</th> <th>Category</th> <th>Edit</th> <th>Delete</th></tr>'
+                for (let i = 0; i < productList.length; i++) {
+                    content += getProduct(productList[i])
+                }
+                document.getElementById('listProduct').innerHTML = content
+                let p = document.getElementById('page').value;
+                alert(typeof(p))
+                // alert(p)
+                if (p == 0) {
+                    $("#previousPage").hide();
+                }
+                if (p > 0) {
+                    $("#previousPage").show();
+                }
+                document.getElementById('pageNumber').innerText = p
+                let totalPage = document.getElementById('totalPage').value
+                alert(p)
+                alert(totalPage)
+                if (p == totalPage) {
+                    $("#nextPage").hide();
+                }
+                if (p < totalPage) {
+                    $("#nextPage").show();
+                }
+            },
+            error: function (err) {
+            }
+        })
+    }
+
+    function next() {
+        let b = document.getElementById('page').value;
+        b = parseInt(b)
+        // alert(typeof(b))
+        b += 1;
+        document.getElementById('page').value = b;
+        searchProduct();
+    }
+
+    function zeroPage() {
+        document.getElementById('page').value = 0;
+        let a = document.getElementById('page').value;
+
+        alert(a)
+    }
+
+    function previous() {
+        let b = document.getElementById('page').value;
+        b = parseInt(b)
+        // alert(typeof(b))
+        b -= 1;
+        document.getElementById('page').value = b;
+        searchProduct();
+    }
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js"
+        integrity="sha384-PsUw7Xwds7x08Ew3exXhqzbhuEYmA2xnwc8BuD6SEr+UmEHlX8/MCltYEodzWA4u"
+        crossorigin="anonymous"></script>
+</body>
+</html>
