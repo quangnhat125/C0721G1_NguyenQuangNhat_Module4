@@ -14,4 +14,5 @@ public interface ICustomerService {
     void save(Customer customer);
     void update(Customer customer);
     Customer findById(Long id);
+    Page<Customer> search(Pageable pageable, String name, String gender, String typeCustomer);
 }

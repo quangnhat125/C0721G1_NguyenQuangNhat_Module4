@@ -7,26 +7,27 @@
 <div th:replace="/customer/layout :: navbar"></div>
 <h1 align="center">ADD NEW CUSTOMER FORM</h1>
 <div align="center">
-    <form th:action="@{/customer/save}" th:object="${customer}" method="post">
+    <div style="color: red" th:if="${message}" th:text="${message}"></div>
+    <form th:action="@{/customer/save}" th:object="${customerDto}" method="post">
         <table border="1" cellpadding="5">
             <tr>
                 <th>Customer Code</th>
                 <td>
-                    <input type="text" id="customerCode" th:field="*{customerCode}" size="15" required/>
+                    <input type="text" id="customerCode" th:field="*{customerCode}" size="15" />
                 </td>
-                <td th:if="${#fields.hasErrors('customerCode')}" th:errors="*{customerCode}">Customer Code Error</td>
+                <td style="color: red" th:if="${#fields.hasErrors('customerCode')}" th:errors="*{customerCode}"></td>
             </tr>
             <tr>
                 <th>Customer Name:</th>
                 <td>
-                    <input type="text" th:field="*{customerName}" id="name" size="45" required/>
+                    <input type="text" th:field="*{customerName}" id="name" size="45" />
                 </td>
-                <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Customer Name Error</td>
+                <td style="color: red" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"</td>
             </tr>
             <tr>
                 <th>Customer Birthday:</th>
                 <td>
-                    <input type="date" th:field="*{customerBirthday}" id="birthday" size="45" required/>
+                    <input type="date" th:field="*{customerBirthday}" id="birthday" size="45" />
                 </td>
             </tr>
             <tr>
@@ -40,35 +41,36 @@
             <tr>
                 <th>Customer ID Card:</th>
                 <td>
-                    <input type="text" th:field="*{idCard}" id="idCard" size="45" required/>
+                    <input type="text" th:field="*{idCard}" id="idCard" size="45" />
                 </td>
-                <td th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}">ID Card Error</td>
+                <td style="color: red" th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}"></td>
             </tr>
             <tr>
                 <th>Customer Number Phone:</th>
                 <td>
-                    <input type="text" th:field="*{phoneNumber}" id="phone" size="45" required/>
+                    <input type="text" th:field="*{phoneNumber}" id="phone" size="45"/>
                 </td>
-                <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone Number Error</td>
+                <td style="color: red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></td>
             </tr>
             <tr>
                 <th>Customer Email:</th>
                 <td>
-                    <input type="text" th:field="*{customerEmail}" id="email" size="45" required/>
+                    <input type="text" th:field="*{customerEmail}" id="email" size="45" />
+                <td th:if="${#fields.hasErrors('customerEmail')}" th:errors="*{customerEmail}"></td>
                 </td>
             </tr>
             <tr>
                 <th>Customer Address:</th>
                 <td>
-                    <input type="text" th:field="*{customerAddress}" id="address" size="45" required/>
+                    <input type="text" th:field="*{customerAddress}" id="address" size="45" />
                 </td>
             </tr>
             <tr>
                 <th>Customer Type:</th>
                 <td>
                     <select th:field="*{customer_type}" class="form-select" name="customer_type_id"
-                            aria-label="Default select example" required>
-                        <option th:each="type : ${customerType}" th:text="${type.customerType}" th:value="${type.id}"></option>
+                            aria-label="Default select example" >
+                        <option th:each="type : ${customerTypeList}" th:text="${type.customerType}" th:value="${type.id}"></option>
                         </th:each>
                     </select>
                 </td>

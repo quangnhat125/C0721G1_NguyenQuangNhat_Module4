@@ -1,6 +1,7 @@
 package com.codegym.furamaresortcasestudy.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Service {
@@ -22,6 +23,8 @@ public class Service {
     private String description;
     private double poolArea;
     private int numberFloor;
+    @OneToMany(mappedBy = "service")
+    private List<Contract> contractList;
 
     public Service() {
     }
@@ -55,6 +58,22 @@ public class Service {
         this.description = description;
         this.poolArea = poolArea;
         this.numberFloor = numberFloor;
+    }
+
+    public Service(String serviceCode, String serviceName, int serviceArea, double serviceCost, int serviceMaxPeople,
+                   RentType rent_type, ServiceType service_type, String standardRoom, String description, double poolArea, int numberFloor, List<Contract> contractList) {
+        this.serviceCode = serviceCode;
+        this.serviceName = serviceName;
+        this.serviceArea = serviceArea;
+        this.serviceCost = serviceCost;
+        this.serviceMaxPeople = serviceMaxPeople;
+        this.rent_type = rent_type;
+        this.service_type = service_type;
+        this.standardRoom = standardRoom;
+        this.description = description;
+        this.poolArea = poolArea;
+        this.numberFloor = numberFloor;
+        this.contractList = contractList;
     }
 
     public String getServiceCode() {
@@ -151,5 +170,13 @@ public class Service {
 
     public void setNumberFloor(int numberFloor) {
         this.numberFloor = numberFloor;
+    }
+
+    public List<Contract> getContractList() {
+        return contractList;
+    }
+
+    public void setContractList(List<Contract> contractList) {
+        this.contractList = contractList;
     }
 }

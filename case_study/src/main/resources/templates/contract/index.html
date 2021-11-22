@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head  th:replace="/contract/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/contract/layout :: navbar"></div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Start Date</th>
+        <th scope="col">End Date</th>
+        <th scope="col">Deposit</th>
+        <th scope="col">Total Money</th>
+        <th scope="col">Employee</th>
+        <th scope="col">Customer</th>
+        <th scope="col">Service</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="ct : ${contract}">
+        <td th:text="${ct.id}"></td>
+        <td th:text="${ct.startDate}"></td>
+        <td th:text="${ct.endDate}"></td>
+        <td th:text="${ct.deposit}"></td>
+        <td th:text="${ct.totalMoney}"></td>
+        <td th:text="${ct.employee.employeeName}"></td>
+        <td th:text="${ct.customer.customerName}"></td>
+        <td th:text="${ct.service.serviceName}"></td>
+        <td>
+            <a th:href="@{/contract/edit/{id}(id=${ct.id})}"/>
+            <button class="btn btn-primary" type="button">Edit
+            </button>
+            </a>
+        </td>
+        <td>
+            <a th:href="@{/contract/delete/{id}(id=${ct.id})}"/>
+            <button th:onclick="onDelete(${ct.id})" class="btn btn-primary" type="button" id="idContractDetail">Delete
+            </button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div>
+    <a th:href="@{'/contract'(page = ${contract.number - 1})}"
+       th:if="${contract.hasPrevious()}">Previous Page</a>
+    <span th:text="${contract.number + 1}"></span> / <span th:text="${contract.totalPages}"></span>
+    <a th:href="@{'/contract'(page = ${contract.number + 1})}"
+       th:if="${contract.hasNext()}">Next Page</a>
+</div>
+
+
+<div th:replace="/contract/layout :: script"></div>
+</body>
+</html>

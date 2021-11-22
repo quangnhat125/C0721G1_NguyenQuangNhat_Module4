@@ -4,6 +4,7 @@ import org.springframework.context.annotation.EnableMBeanExport;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Entity
 public class Customer {
@@ -22,6 +23,8 @@ public class Customer {
     @ManyToOne
     @JoinColumn(name = "customer_type_id", referencedColumnName = "id")
     private CustomerType customer_type;
+    @OneToMany(mappedBy = "customer")
+    private List<Contract> contractList;
 
     public Customer() {
     }
@@ -52,6 +55,20 @@ public class Customer {
         this.customerEmail = customerEmail;
         this.customerAddress = customerAddress;
         this.customer_type = customer_type;
+    }
+
+    public Customer(String customerCode, String customerName, String customerBirthday, int gender, String idCard,
+                    String phoneNumber, String customerEmail, String customerAddress, CustomerType customer_type, List<Contract> contractList) {
+        this.customerCode = customerCode;
+        this.customerName = customerName;
+        this.customerBirthday = customerBirthday;
+        this.gender = gender;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.customerEmail = customerEmail;
+        this.customerAddress = customerAddress;
+        this.customer_type = customer_type;
+        this.contractList = contractList;
     }
 
     public Long getId() {
@@ -132,5 +149,13 @@ public class Customer {
 
     public void setCustomerAddress(String customerAddress) {
         this.customerAddress = customerAddress;
+    }
+
+    public List<Contract> getContractList() {
+        return contractList;
+    }
+
+    public void setContractList(List<Contract> contractList) {
+        this.contractList = contractList;
     }
 }

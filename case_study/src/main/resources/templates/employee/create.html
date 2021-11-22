@@ -8,57 +8,67 @@
 <div th:replace="/employee/layout :: navbar"></div>
 <h1 align="center">ADD NEW EMPLOYEE FORM</h1>
 <div align="center">
-    <form th:action="@{/employee/save}" th:object="${employee}" method="post">
+    <form th:action="@{/employee/save}" th:object="${employeeDto}" method="post">
+        <div th:i="${message}" th:text="${message}"/>
         <table border="1" cellpadding="5">
             <tr>
                 <th>Employee Name</th>
                 <td>
-                    <input type="text" id="employeeName" th:field="*{employeeName}" size="15" required/>
+                    <input type="text" id="employeeName" th:field="*{employeeName}" size="15"/>
+                    <br>
+                <td style="color: red" th:if="${#fields.hasErrors('employeeName')}" th:errors="*{employeeName}"></td>
                 </td>
-                <!--                <td th:if="${#fields.hasErrors('customerCode')}" th:errors="*{customerCode}">Customer Code Error</td>-->
             </tr>
             <tr>
                 <th>Employee Birthday:</th>
                 <td>
-                    <input type="date" th:field="*{employeeBirthday}" id="birthday" size="45" required/>
+                    <input type="date" th:field="*{employeeBirthday}" id="birthday" size="45"/>
                 </td>
-                <!--                <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Customer Name Error</td>-->
+
             </tr>
             <tr>
                 <th>ID Card:</th>
                 <td>
-                    <input type="text" th:field="*{idCard}" id="idCard" size="45" required/>
+                    <input type="text" th:field="*{idCard}" id="idCard" size="45"/>
+                    <br>
+                    <td style="color: red" th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}"></td>
                 </td>
             </tr>
             <tr>
                 <th>Salary:</th>
                 <td>
-                    <input type="text" th:field="*{salary}" id="salary" size="45" required/>
+                    <input type="text" th:field="*{salary}" id="salary" size="45"/>
+                    <br>
+                    <td style="color: red" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></td>
                 </td>
             </tr>
             <tr>
                 <th>Phone Number:</th>
                 <td>
-                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" size="45" required/>
+                    <input type="text" th:field="*{phoneNumber}" id="phoneNumber" size="45"/>
+                    <br>
+                <td style="color: red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></td>
                 </td>
             </tr>
             <tr>
                 <th>Email:</th>
                 <td>
-                    <input type="text" th:field="*{email}" id="email" size="45" required/>
+                    <input type="text" th:field="*{email}" id="email" size="45"/>
+                    <br>
+                    <td style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></td>
                 </td>
             </tr>
             <tr>
                 <th>Address:</th>
                 <td>
-                    <input type="text" th:field="*{address}" id="address" size="45" required/>
+                    <input type="text" th:field="*{address}" id="address" size="45"/>
                 </td>
             </tr>
             <tr>
                 <th>Position:</th>
                 <td>
                     <select th:field="*{position}" class="form-select" name="customer_type_id"
-                            aria-label="Default select example" required>
+                            aria-label="Default select example">
                         <option th:each="position : ${positionList}" th:text="${position.positionName}"
                                 th:value="${position.id}"></option>
                         </th:each>
@@ -69,7 +79,7 @@
                 <th>Education Degree:</th>
                 <td>
                     <select th:field="*{education}" class="form-select" name="customer_type_id"
-                            aria-label="Default select example" required>
+                            aria-label="Default select example">
                         <option th:each="type : ${educationList}" th:text="${type.educationName}"
                                 th:value="${type.id}"></option>
                         </th:each>
@@ -80,7 +90,7 @@
                 <th>Division:</th>
                 <td>
                     <select th:field="*{division}" class="form-select" name="customer_type_id"
-                            aria-label="Default select example" required>
+                            aria-label="Default select example">
                         <option th:each="type : ${divisionList}" th:text="${type.divisionName}"
                                 th:value="${type.id}"></option>
                         </th:each>

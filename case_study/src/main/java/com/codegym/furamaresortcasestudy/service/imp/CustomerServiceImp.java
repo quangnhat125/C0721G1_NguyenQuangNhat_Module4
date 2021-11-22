@@ -43,4 +43,9 @@ public class CustomerServiceImp implements ICustomerService {
     public Customer findById(Long id) {
         return customerRepository.findById(id).get();
     }
+
+    @Override
+    public Page<Customer> search(Pageable pageable, String name, String gender, String typeCustomer) {
+        return customerRepository.search(pageable, "%" + name +"%", "%" + gender +"%", "%" + typeCustomer +"%");
+    }
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/contract_detail/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/contract_detail/layout :: navbar"></div>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Contract</th>
+        <th scope="col">Attach Service</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cdetail : ${contractDetailList}">
+        <td th:text="${cdetail.contract.id}"></td>
+        <td th:text="${cdetail.attachService.id}"></td>
+        <td th:text="${cdetail.quantity}"></td>
+        <td>
+            <a th:href="@{/contract_detail/edit/{id}(id=${cdetail.id})}"/>
+            <button class="btn btn-primary" type="button">Edit
+            </button>
+            </a>
+        </td>
+        <td>
+            <a th:href="@{/contract_detail/delete/{id}(id=${cdetail.id})}"/>
+            <button th:onclick="onDelete(${cdetail.id})" class="btn btn-primary" type="button" id="idContractDetail">Delete
+            </button>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div>
+    <a th:href="@{'/contract_detail'(page = ${contractDetailList.number - 1})}"
+       th:if="${contractDetailList.hasPrevious()}">Previous Page</a>
+    <span th:text="${contractDetailList.number + 1}"></span> / <span th:text="${contractDetailList.totalPages}"></span>
+    <a th:href="@{'/contract_detail'(page = ${contractDetailList.number + 1})}"
+       th:if="${contractDetailList.hasNext()}">Next Page</a>
+</div>
+
+<div th:replace="/contract_detail/layout :: script"></div>
+<script>
+    function onDelete(id) {
+        document.getElementById("idContractDetail").value = id;
+    }
+    function getAllId() {
+        document.getElementById("allIdContractDetail").value = "";
+        let array = [];
+        let checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+        for (let i = 0; i < checkboxes.length; i++) {
+            array.push(checkboxes[i].value);
+        }
+        for (let i = 0; i < array.length; i++) {
+            document.getElementById("allIdContractDetail").value += "," + array[i];
+        }
+    }
+    $('#exampleModal').on('show.bs.modal', event => {
+        var button = $(event.relatedTarget);
+        var modal = $(this);
+    });
+</script>
+</body>
+</html>

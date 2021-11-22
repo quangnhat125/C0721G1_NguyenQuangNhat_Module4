@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FURAMA RESORT</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="weather.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+        .row.content {
+            height: 1500px
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+
+            .row.content {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row content">
+        <div class="col-sm-3 sidenav">
+            <h2>FURAMA RESORT MAIN PAGE</h2>
+            <ul class="nav nav-pills nav-stacked">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/customer">Customer</a></li>
+                <li><a href="/employee">Employee</a></li>
+                <li><a href="/service">Service</a></li>
+                <li><a href="/contract">Contract</a></li>
+            </ul>
+            <br>
+            <div class="widget">
+                <div class="clock">
+                    <div class="min"></div>
+                    <div class="hour"></div>
+                </div>
+                <div class="upper">
+                    <div class="date">Loading</div>
+                    <div class="year">Loading</div>
+                    <div class="place update">Loading</div>
+                </div>
+                <div class="lower">
+                    <ul class="infos">
+                        <li class="info temp">
+                            <h2 class="title">TEMPERATURE</h2>
+                            <span class='update'>Loading</span>
+                        </li>
+                        <li class="info weather">
+                            <h2 class="title">WEATHER</h2>
+                            <p class="main update">Loading</p>
+                            <p class="des update">Loading</p>
+                        </li>
+                        <li class="info wind">
+                            <h2 class="title">WIND</h2>
+                            <span class='update'>Loading</span>
+                        </li>
+                        <li class="info humidity">
+                            <h2 class="title">HUMIDITY</h2>
+                            <span class='update'>Loading</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-9">
+            <h1></h1>
+            <hr>
+            <h3>KHU NGHỈ DƯỠNG ĐẲNG CẤP THẾ GIỚI FURAMA ĐÀ NẴNG, TỰ HÀO LÀ KHU NGHỈ DƯỠNG ẨM THỰC TẠI VIỆT NAM</h3>
+            <br><br>
+            <p>Hướng ra bãi biển Đà Nẵng trải dài cát trắng, Furama Resort Đà Nẵng là cửa ngõ đến với 3 di sản văn hoá
+                thế giới: Hội An (20 phút), Mỹ Sơn (90 phút) và Huế (2 tiếng. 196 phòng hạng sang cùng với 70 căn biệt
+                thự từ
+                hai đến bốn phòng ngủ có hồ bơi riêng đều được trang trí trang nhã, theo phong cách thiết kế truyền
+                thống của Việt Nam
+                và kiến trúc thuộc địa của Pháp, biến Furama thành khu nghỉ dưỡng danh giá nhất tại Việt Nam – vinh dự
+                được đón tiếp nhiều
+                người nổi tiếng, giới hoàng gia, chính khách, ngôi sao điện ảnh và các nhà lãnh đạo kinh doanh quốc
+                tế.</p>
+            <a href="https://furamavietnam.com/vi/the-resort/"><small>Show more</small></a>
+            <hr>
+            <h3>Activities at Here</h3>
+            <img width="500px"
+                 src="http://hotlinedatphong.com/wp-content/uploads/2020/10/BE-COOL-ON-DANANG-BEACH-mobile-1.jpg ">
+            <img width="500px" src="https://furamavietnam.com/wp-content/uploads/2018/08/Jar_break.jpg ">
+            <hr>
+
+
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<footer class="container-fluid">
+    <p>Footer Text</p>
+</footer>
+<script>
+    var info = {};
+    var cities = [
+        {name: 'Chicago', utc: '-5'},
+        {name: 'London', utc: '+1'},
+        {name: 'Berlin', utc: '+2'},
+        {name: 'Paris', utc: '+2'},
+        {name: 'Taipei', utc: '+8'},
+        {name: 'Bangkok', utc: '+7'},
+        {name: 'Singapore', utc: '+8'},
+        {name: 'Prague', utc: '+2'},
+        {name: 'Toronto', utc: '-4'},
+        {name: 'Seoul', utc: '+9'},
+        {name: 'Rome', utc: '+2'},
+        {name: 'New York', utc: '-4'},
+        {name: 'Shanghai', utc: '+8'},
+        {name: 'Barcelona', utc: '+2'},
+        {name: 'Milan', utc: '+2'},
+        {name: 'Amsterdam', utc: '+2'},
+        {name: 'Vienna', utc: '+2'},
+        {name: 'Beijing', utc: '+8'}
+    ];
+    var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    var current = 0;
+
+
+    function init() {
+        var date = new Date();
+        $('.date').text(monthNames[date.getMonth()] + ' ' + date.getDate());
+        $('.year').text(date.getFullYear());
+
+        //fetch weather data
+        for (var i = 0; i < cities.length; i++) {
+            var date = new Date();
+            $.getJSON('http://api.openweathermap.org/data/2.5/weather?q=' + cities[i].name + '&callback=?&units=metric', null,
+                function (data) {
+                    if (data.cod == '404') return;
+                    info[data.name] = {
+                        name: data.name,
+                        country: data.sys.country,
+                        temp: data.main.temp,
+                        weather: data.weather[0].main,
+                        des: data.weather[0].description,
+                        hum: data.main.humidity,
+                        wind: data.wind.speed
+                    };
+
+                }).success(function (data) {
+                if (data.name == 'Beijing')
+                    update();
+
+            });
+        }
+
+    }
+
+    setTimes();
+    init();
+
+
+    //set the local times in degrees so it shows in the clock
+    function setTimes() {
+        var date = new Date();
+        for (var j = 0; j < cities.length; j++) {
+            var hours = (date.getUTCHours() > 11) ? date.getUTCHours() - 12 + parseInt(cities[j].utc, 10) : date.getUTCHours() + parseInt(cities[j].utc, 10);
+            cities[j].hours = (hours / 12) * 360;
+            cities[j].minoutes = (date.getUTCMinutes() / 60) * 360;
+
+        }
+
+    }
+
+    //update all information for each place
+    function update() {
+        $('.update').addClass('anim');
+        var city = info[cities[current].name];
+
+        $('.place').text(city.name + ',' + city.country);
+        $('.temp span').html(city.temp + '<sup>o</sup>C');
+        $('.main').text(city.weather);
+        $('.des').text(city.des);
+        $('.wind span').html(city.wind + 'm/s');
+        $('.humidity span').html(city.hum + '%');
+        $('.hour').css('transform', 'rotate(' + cities[current].hours + 'deg)');
+        $('.min').css('transform', 'rotate(' + cities[current].minoutes + 'deg)');
+        current = (current + 1) % 18;
+        setTimeout(update, 6000);
+    }
+
+    //after fade animation has finished remove the class that caused it so it can be reused
+    $('.update').on('webkitAnimationEnd oAnimationEnd msAnimationEnd animationend', function () {
+        $('.anim').removeClass('anim');
+    });
+</script>
+</body>
+</html>

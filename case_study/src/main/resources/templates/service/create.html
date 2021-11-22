@@ -8,38 +8,40 @@
 <div th:replace="/service/layout :: navbar"></div>
 <h1 align="center">ADD NEW SERVICE FORM</h1>
 <div align="center">
-    <form th:action="@{/service/save}" th:object="${service}" method="post">
+    <form th:action="@{/service/save}" th:object="${serviceDto}" method="post">
         <table border="1" cellpadding="5">
             <tr>
                 <th>Service Code</th>
                 <td>
-                    <input type="text" id="serviceCode" th:field="*{serviceCode}" size="15" required/>
+                    <input type="text" id="serviceCode" th:field="*{serviceCode}" size="15"/>
+                    <br>
+                    <div style="color: red" th:if="${#fields.hasErrors('serviceCode')}" th:errors="*{serviceCode}"></div>
                 </td>
-                <!--                <td th:if="${#fields.hasErrors('customerCode')}" th:errors="*{customerCode}">Customer Code Error</td>-->
             </tr>
             <tr>
                 <th>Service Name:</th>
                 <td>
-                    <input type="text" th:field="*{serviceName}" id="name" size="45" required/>
+                    <input type="text" th:field="*{serviceName}" id="name" size="45"/>
+                    <br>
+                    <div style="color: red" th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}"></div>
                 </td>
-                <!--                <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Customer Name Error</td>-->
             </tr>
             <tr>
                 <th>Service Area:</th>
                 <td>
-                    <input type="text" th:field="*{serviceArea}" id="area" size="45" required/>
+                    <input type="text" th:field="*{serviceArea}" id="area" size="45"/>
                 </td>
             </tr>
             <tr>
                 <th>Service Cost:</th>
                 <td>
-                    <input type="text" th:field="*{serviceCost}" id="cost" size="45" required/>
+                    <input type="text" th:field="*{serviceCost}" id="cost" size="45"/>
                 </td>
             </tr>
             <tr>
                 <th>Max People:</th>
                 <td>
-                    <input type="text" th:field="*{serviceMaxPeople}" id="maxPeople" size="45" required/>
+                    <input type="text" th:field="*{serviceMaxPeople}" id="maxPeople" size="45"/>
                 </td>
             </tr>
             <tr>
@@ -67,27 +69,31 @@
             <tr>
                 <th>Standard Room:</th>
                 <td>
-                    <input type="text" th:field="*{standardRoom}" id="standardRoom" size="45" required/>
+                    <input type="text" th:field="*{standardRoom}" id="standardRoom" size="45"/>
+                    <br>
+                    <div style="color: red" th:if="${#fields.hasErrors('standardRoom')}" th:errors="*{standardRoom}"></div>
                 </td>
-                <!--                <td th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}">ID Card Error</td>-->
             </tr>
             <tr>
                 <th>Description:</th>
                 <td>
-                    <input type="text" th:field="*{description}" id="description" size="45" required/>
+                    <input type="text" th:field="*{description}" id="description" size="45"/>
+                    <br>
+                    <div style="color: red" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                 </td>
-                <!--                <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Phone Number Error</td>-->
             </tr>
             <tr>
                 <th>Pool Area:</th>
                 <td>
-                    <input type="text" th:field="*{poolArea}" id="pool" size="45" required/>
+                    <input type="text" th:field="*{poolArea}" id="pool" size="45"/>
                 </td>
             </tr>
             <tr>
                 <th>Number Of Floor:</th>
                 <td>
-                    <input type="text" th:field="*{numberFloor}" id="floor" size="45" required/>
+                    <input type="text" th:field="*{numberFloor}" id="floor" size="45"/>
+                    <br>
+                    <div style="color: red" th:if="${#fields.hasErrors('numberFloor')}" th:errors="*{numberFloor}"></div>
                 </td>
             </tr>
             <tr>

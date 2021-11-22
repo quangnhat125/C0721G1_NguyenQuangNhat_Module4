@@ -5,11 +5,14 @@ import com.codegym.furamaresortcasestudy.model.Customer;
 import com.codegym.furamaresortcasestudy.model.CustomerType;
 import com.codegym.furamaresortcasestudy.service.ICustomerService;
 import com.codegym.furamaresortcasestudy.service.ICustomerTypeService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,62 +47,73 @@ public class CustomerController {
     public ModelAndView showCreateCustomerForm() {
         CustomerDto customerDto = new CustomerDto();
         ModelAndView modelAndView = new ModelAndView("/customer/create");
-        List<CustomerType> customerTypeList = customerTypeService.findAll();
-        modelAndView.addObject("customer", customerDto);
-        modelAndView.addObject("customerType", customerTypeList);
+        modelAndView.addObject("customerDto", customerDto);
         return modelAndView;
     }
 
     @PostMapping("/save")
-    public ModelAndView save(@ModelAttribute @Validated Customer customer, BindingResult bindingResult, @PageableDefault(value = 5) Pageable pageable) {
-//        ModelAndView modelAndView = new ModelAndView("/customer/index");
-//        List<Customer> customerList = customerService.findAll();
-//        if (bindingResult.hasFieldErrors()) {
-//            return modelAndView;
-//        } else{
-//            Customer customer = new Customer();
-//            customerService.save(customer);
-//            modelAndView.addObject("customer", customerDto);
-//            modelAndView.addObject("success", "Create customer successfully !");
-//        }
-//        return modelAndView;
-        customerService.save(customer);
-        ModelAndView modelAndView = new ModelAndView("/customer/index");
-        Page<Customer> customerList = customerService.findAll(pageable);
-        modelAndView.addObject("blogList", customerList);
-        modelAndView.addObject("message", "Add Completed!");
+    public ModelAndView save(@ModelAttribute @Validated CustomerDto customerDto, BindingResult bindingResult) {
+        List<Customer> customerList = customerService.findAll();
+        customerDto.setCustomerList(customerList);
+        new CustomerDto().validate(customerDto, bindingResult);
+        ModelAndView modelAndView = new ModelAndView("/customer/create");
+        if (!bindingResult.hasFieldErrors()) {
+            Customer customer = new Customer();
+            BeanUtils.copyProperties(customerDto, customer);
+            customerService.save(customer);
+            modelAndView.addObject("message", "Add Completed!");
+        }
         return modelAndView;
 
     }
 
     @GetMapping("/edit/{id}")
     public ModelAndView edit(@PathVariable Long id) {
-        List<CustomerType> customerType = customerTypeService.findAll();
         ModelAndView modelAndView = new ModelAndView("/customer/edit");
-        modelAndView.addObject("customerType", customerType);
-        modelAndView.addObject("customer", customerService.findById(id));
+        Customer customer = customerService.findById(id);
+        CustomerDto customerDto = new CustomerDto();
+        BeanUtils.copyProperties(customer, customerDto);
+        modelAndView.addObject("customerDto", customerDto);
         return modelAndView;
     }
 
     @PostMapping("/update")
-    public ModelAndView update(@ModelAttribute Customer customer) {
-        customerService.update(customer);
+    public ModelAndView update(@ModelAttribute @Validated CustomerDto customerDto, BindingResult bindingResult) {
         List<Customer> customerList = customerService.findAll();
-        ModelAndView modelAndView = new ModelAndView("/customer/index");
-        modelAndView.addObject("customer", customerList);
-        modelAndView.addObject("message", "Update Completed!");
+        customerDto.setCustomerList(customerList);
+        new CustomerDto().validate(customerDto, bindingResult);
+        ModelAndView modelAndView = new ModelAndView("/customer/edit");
+        if (!bindingResult.hasFieldErrors()) {
+            Customer customer = new Customer();
+            BeanUtils.copyProperties(customerDto, customer);
+            customerService.save(customer);
+            modelAndView.addObject("message", "Edit Completed!");
+        }
         return modelAndView;
     }
 
-    @GetMapping("/delete/{id}")
-    public ModelAndView delete(@PathVariable Long id) {
+    @GetMapping("/delete")
+    public ModelAndView delete(@RequestParam Long id, @PageableDefault(value = 5) Pageable pageable) {
         customerService.deleteCustomer(id);
-        List<Customer> customerList = customerService.findAll();
+        Page<Customer> customerList = customerService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/customer/index");
         modelAndView.addObject("customer", customerList);
         modelAndView.addObject("message", "Deleted Completed!");
         return modelAndView;
     }
 
+    @GetMapping("/search")
+    public ModelAndView search(@RequestParam(value = "customerNameSearch", defaultValue = "", required = false) String customerNameSearch,
+                               @RequestParam(value = "genSearch", defaultValue = "", required = false) String genSearch,
+                               @RequestParam(value = "typeCustomer", defaultValue = "", required = false) String typeCustomer,
+                               @PageableDefault(value = 5, sort = "customerCode", direction = Sort.Direction.ASC) Pageable pageable) {
+        ModelAndView modelAndView = new ModelAndView("/customer/index");
+        Page<Customer> customerPage = customerService.search(pageable, customerNameSearch, genSearch, typeCustomer);
+        modelAndView.addObject("name", customerNameSearch);
+        modelAndView.addObject("gender", genSearch);
+        modelAndView.addObject("typeCustomer", typeCustomer);
+        modelAndView.addObject("customer", customerPage);
+        return modelAndView;
+    }
 
 }

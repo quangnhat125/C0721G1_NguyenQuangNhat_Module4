@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/contract/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/contract/layout :: navbar"></div>
+<h1 align="center">ADD NEW CONTRACT FORM</h1>
+<div align="center">
+    <form th:action="@{/contract/save}" th:object="${contract}" method="post">
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Start Date</th>
+                <td>
+                    <input type="date" th:field="*{startDate}" id="startDate" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>End Date:</th>
+                <td>
+                    <input type="date" th:field="*{endDate}" id="endDate" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Deposit:</th>
+                <td>
+                    <input type="text" th:field="*{deposit}" id="deposit" size="45" required/>
+                </td>
+            </tr>
+            <tr>
+                <th>Employee:</th>
+                <td>
+                    <select id="employee" class="form-control" th:field="*{employee}">
+                        <option th:each="emp:${employeeList}" th:value="${emp.id}"
+                                th:text="${emp.employeeName}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Customer:</th>
+                <td>
+                    <select id="customer" class="form-control" th:field="*{customer}">
+                        <option th:each="cus:${customerList}" th:value="${cus.id}"
+                                th:text="${cus.customerName}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Service:</th>
+                <td>
+                    <select id="service" class="form-control" th:field="*{service}">
+                        <option th:each="ser:${serviceList}" th:value="${ser.id}" th:text="${ser.serviceName}"></option>
+                    </select>
+                </td>
+            </tr>
+            <td colspan="2" align="center">
+                <input class="bg-success" type="submit" value="Create"/>
+            </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div th:replace="/contract/layout :: script"></div>
+</body>
+</html>

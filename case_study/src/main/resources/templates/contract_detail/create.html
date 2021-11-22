@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/contract_detail/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/contract_detail/layout :: navbar"></div>
+<h1 align="center">ADD NEW CONTRACT DETAIL FORM</h1>
+<div align="center">
+    <form th:action="@{/contract-detail/save}" th:object="${contractDetailDto}" method="post">
+        <div style="color: red" th:if="${message}" th:text="${message}"></div>
+        <table border="1" cellpadding="5">
+            <tr>
+                <th>Contract ID</th>
+                <td>
+                    <select id="contractId" class="form-control" th:field="*{contract}">
+                        <option th:each="contract :${contractList}" th:value="${contract.id}"
+                                th:text="${contract.id}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th>Attach Service ID:</th>
+                <td>
+                    <select id="attachService" class="form-control" th:field="*{attachService}">
+                        <option th:each="i :${attachService}" th:value="${i.id}" th:text="${i.attachName}"></option>
+                    </select>
+                </td>
+                <!--                <td th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}">Customer Name Error</td>-->
+            </tr>
+            <tr>
+                <th>Quantity:</th>
+                <td>
+                    <input type="text" th:field="*{quantity}" id="quantity" size="45" required/>
+                    <br>
+                <td style="color: red" th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}"></td>
+                </td>
+            </tr>
+            <td colspan="2" align="center">
+                <input class="bg-success" type="submit" value="Create"/>
+            </td>
+            </tr>
+        </table>
+    </form>
+
+
+</div>
+
+<div th:replace="/customer/layout :: script"></div>
+</body>
+</html>
