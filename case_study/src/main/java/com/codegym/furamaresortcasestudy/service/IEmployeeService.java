@@ -14,4 +14,5 @@ public interface IEmployeeService {
     void save(Employee employee);
     void update(Employee employee);
     Employee findById(Long id);
+    Page<Employee> search(Pageable pageable, String name, String address, String typePosition, String typeEducation, String typeDivision);
 }

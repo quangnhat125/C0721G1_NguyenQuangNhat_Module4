@@ -73,9 +73,9 @@ public class EmployeeController {
         return modelAndView;
     }
     @GetMapping("/delete")
-    public ModelAndView delete(@RequestParam Long id) {
+    public ModelAndView delete(@RequestParam Long id, @PageableDefault(value = 5) Pageable pageable) {
         employeeService.deleteEmployee(id);
-        List<Employee> employeeList = employeeService.findAll();
+        Page<Employee> employeeList = employeeService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/employee/index");
         modelAndView.addObject("employee", employeeList);
         modelAndView.addObject("message", "Deleted Completed!");
@@ -104,6 +104,23 @@ public class EmployeeController {
             employeeService.save(employee);
             modelAndView.addObject("message", "Edit Completed!");
         }
+        return modelAndView;
+    }
+    @GetMapping("/search")
+    public ModelAndView search(@RequestParam(value = "employeeNameSearch", defaultValue = "", required = false) String employeeNameSearch,
+                               @RequestParam(value = "addressSearch", defaultValue = "", required = false) String addressSearch,
+                               @RequestParam(value = "typePosition", defaultValue = "", required = false) String typePosition,
+                               @RequestParam(value = "typeEducation", defaultValue = "", required = false) String typeEducation,
+                               @RequestParam(value = "typeDivision", defaultValue = "", required = false) String typeDivision,
+                               @PageableDefault(value = 5) Pageable pageable) {
+        ModelAndView modelAndView = new ModelAndView("/employee/index");
+        Page<Employee> employeePage = employeeService.search(pageable, employeeNameSearch, addressSearch, typePosition, typeEducation, typeDivision);
+        modelAndView.addObject("name", employeeNameSearch);
+        modelAndView.addObject("addressSearch", addressSearch);
+        modelAndView.addObject("typePosition", typePosition);
+        modelAndView.addObject("typeEducation", typeEducation);
+        modelAndView.addObject("typeDivision", typeDivision);
+        modelAndView.addObject("employee", employeePage);
         return modelAndView;
     }
 

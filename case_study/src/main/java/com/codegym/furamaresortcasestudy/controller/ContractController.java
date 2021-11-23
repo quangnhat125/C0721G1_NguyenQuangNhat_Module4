@@ -106,8 +106,8 @@ public class ContractController {
 //        modelAndView.addObject("message", "Update Completed!");
 //        return modelAndView;
 //    }
-    @GetMapping("/delete/{id}")
-    public ModelAndView delete(@PathVariable Long id, @PageableDefault(value = 5) Pageable pageable) {
+    @GetMapping("/delete")
+    public ModelAndView delete(@RequestParam Long id, @PageableDefault(value = 5) Pageable pageable) {
         contractService.deleteContract(id);
         Page<Contract> contractPage = contractService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/contract/index");

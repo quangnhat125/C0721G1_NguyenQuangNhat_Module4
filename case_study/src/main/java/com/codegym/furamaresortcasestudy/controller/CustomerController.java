@@ -80,6 +80,11 @@ public class CustomerController {
     @PostMapping("/update")
     public ModelAndView update(@ModelAttribute @Validated CustomerDto customerDto, BindingResult bindingResult) {
         List<Customer> customerList = customerService.findAll();
+        for (int i = 0; i < customerList.size(); i++) {
+            if (customerList.get(i).getId() == customerDto.getId()) {
+                customerList.remove(customerList.get(i));
+            }
+        }
         customerDto.setCustomerList(customerList);
         new CustomerDto().validate(customerDto, bindingResult);
         ModelAndView modelAndView = new ModelAndView("/customer/edit");
@@ -106,7 +111,7 @@ public class CustomerController {
     public ModelAndView search(@RequestParam(value = "customerNameSearch", defaultValue = "", required = false) String customerNameSearch,
                                @RequestParam(value = "genSearch", defaultValue = "", required = false) String genSearch,
                                @RequestParam(value = "typeCustomer", defaultValue = "", required = false) String typeCustomer,
-                               @PageableDefault(value = 5, sort = "customerCode", direction = Sort.Direction.ASC) Pageable pageable) {
+                               @PageableDefault(value = 5) Pageable pageable) {
         ModelAndView modelAndView = new ModelAndView("/customer/index");
         Page<Customer> customerPage = customerService.search(pageable, customerNameSearch, genSearch, typeCustomer);
         modelAndView.addObject("name", customerNameSearch);

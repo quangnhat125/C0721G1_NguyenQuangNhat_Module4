@@ -56,7 +56,5 @@ public class ContractDetailDto implements Validator {
     }
 
     @Override
-    public void validate(Object target, Errors errors) {
-
-    }
+    public void validate(Object target, Errors errors) {}
 }

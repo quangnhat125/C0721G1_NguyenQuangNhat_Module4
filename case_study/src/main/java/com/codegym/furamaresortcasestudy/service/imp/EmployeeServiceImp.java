@@ -42,4 +42,9 @@ public class EmployeeServiceImp implements IEmployeeService {
     public Employee findById(Long id) {
         return employeeRepository.findById(id).get();
     }
+
+    @Override
+    public Page<Employee> search(Pageable pageable, String name, String address, String typePosition, String typeEducation, String typeDivision) {
+        return employeeRepository.search(pageable, "%" + name +"%", "%" + address + "%", "%" + typePosition +"%", "%" + typeEducation + "%", "%" + typeDivision +"%");
+    }
 }

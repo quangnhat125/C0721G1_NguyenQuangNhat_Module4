@@ -12,5 +12,12 @@ public class HomeController {
     public String showHomePage() {
         return "home1";
     }
-
+    @GetMapping("/404")
+    public String get404Page(){
+        return "404";
+    }
+    @GetMapping("/login")
+    public String getLoginPage(){
+        return "login";
+    }
 }

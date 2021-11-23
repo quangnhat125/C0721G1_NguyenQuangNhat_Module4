@@ -9,6 +9,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class CustomerDto implements Validator {
@@ -16,6 +20,8 @@ public class CustomerDto implements Validator {
     @Pattern(regexp = "^[K][H][-]\\d{4}", message = "Please enter the correct format for customer code 'KH-XXXX' !")
     private String customerCode;
     private String customerName;
+    @Pattern(regexp = "\\d{4}[-]((([0]{1})([1-9]{1}))|(([1]{1})([0-2]{1})))[-]((([0]{1})([1-9]{1}))|(([1-2]{1})([0-9]{1}))|(([3]{1})([0-1]{1})))",
+            message = "Please enter the correct format for birthday 'DD/MM/YYYY'")
     private String customerBirthday;
     private int gender;
     @Pattern(regexp = "\\d{9}", message = "Please enter the correct format for id card which is 9-digit string !")
@@ -137,7 +143,61 @@ public class CustomerDto implements Validator {
             if (customer.getPhoneNumber().equals(customerDto.getPhoneNumber())){
                 errors.rejectValue("phoneNumber", "Number", "Phone Number is already exists!");
             }
+            if (customer.getCustomerCode().equals(customerDto.getCustomerCode())){
+                errors.rejectValue("customerCode", "code", "Customer Code is already exists!");
+            }
+        }
+        try{
+            if (checkMaxAge(customerDto.customerBirthday)) {
+                errors.rejectValue("customerBirthday", "maxAge", "Age must be less than 100!");
+            }
+            if (checkMinAge(customerDto.customerBirthday)) {
+                errors.rejectValue("customerBirthday", "minAge", "Age must be greater than 18!");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private long getDate(String date) throws ParseException {
+        long days = -1;
+        if(date ==null ||date == ""){
+            return days;
+        }
+        if(date !=null || date !="") {
+            String[] arrayDate = date.split("-");
+            int day = Integer.parseInt(arrayDate[2]);
+            int month = Integer.parseInt(arrayDate[1]);
+            int year = Integer.parseInt(arrayDate[0]);
+            DateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            Date currentDate = new Date();
+            Date date1;
+            Date date2;
+            String startDate = "" + day + "-" + month + "-" + year;
+            String endDate = simpleDateFormat.format(currentDate);
+            date1 = simpleDateFormat.parse(startDate);
+            date2 = simpleDateFormat.parse(endDate);
+            long getDiff = date2.getTime() - date1.getTime();
+
+            return days = getDiff / (24 * 60 * 60 * 1000);
 
         }
+        return days;
+    }
+    private boolean checkMaxAge(String date) throws ParseException {
+        long days  = getDate(date);
+        if(days/365>100||days ==-1){
+            return true;
+        }
+        return false;
+    }
+    private boolean checkMinAge(String date) throws ParseException {
+        long days  = getDate(date);
+        if(days/365<18||days ==-1){
+            return true;
+        }
+        return false;
+
     }
 }

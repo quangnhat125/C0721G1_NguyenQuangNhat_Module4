@@ -1,0 +1,18 @@
+package com.codegym.furama_case_study_final.service;
+
+import com.codegym.furama_case_study_final.model.Customer;
+import com.codegym.furama_case_study_final.model.Employee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
+public interface IEmployeeService {
+    List<Employee> findAll();
+    Page<Employee> findAll(Pageable pageable);
+    void deleteEmployee(Long id);
+    void save(Employee employee);
+    void update(Employee employee);
+    Employee findById(Long id);
+    Page<Employee> search(Pageable pageable, String name, String address, String typePosition, String typeEducation, String typeDivision);
+}
