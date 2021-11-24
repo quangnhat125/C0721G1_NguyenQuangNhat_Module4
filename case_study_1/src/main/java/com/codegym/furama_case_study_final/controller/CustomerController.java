@@ -1,6 +1,8 @@
 package com.codegym.furama_case_study_final.controller;
 
+import com.codegym.furama_case_study_final.dto.CustomerDetail;
 import com.codegym.furama_case_study_final.dto.CustomerDto;
+import com.codegym.furama_case_study_final.dto.CustomerInUsing;
 import com.codegym.furama_case_study_final.model.Customer;
 import com.codegym.furama_case_study_final.model.CustomerType;
 import com.codegym.furama_case_study_final.service.ICustomerService;
@@ -11,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -120,5 +124,24 @@ public class CustomerController {
         modelAndView.addObject("customer", customerPage);
         return modelAndView;
     }
+    @GetMapping("/in-using")
+    public ModelAndView showListInUsing(@RequestParam(value = "page", defaultValue = "0") int page) {
+        ModelAndView modelAndView = new ModelAndView("/customer/in_using");
+        int size = 6;
+        List<CustomerInUsing> customerInUsingList = customerService.showList(0, 9999);
+        int total = customerInUsingList.size() + 1/ size;
+        int newPage = page * size;
+        List<CustomerInUsing> newCustomerInUsingList = customerService.showList(newPage, size);
+        modelAndView.addObject("newCustomerList", newCustomerInUsingList);
+        modelAndView.addObject("page", page);
+        modelAndView.addObject("total", total );
+        return modelAndView;
+    }
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getDetail(@PathVariable Long id) {
+        List<CustomerDetail> customerDetailList = customerService.showListDetail(id);
+        return new ResponseEntity<>(customerDetailList, HttpStatus.OK);
+    }
+
 
 }

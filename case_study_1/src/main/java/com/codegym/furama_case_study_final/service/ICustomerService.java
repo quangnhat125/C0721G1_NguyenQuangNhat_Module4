@@ -1,5 +1,7 @@
 package com.codegym.furama_case_study_final.service;
 
+import com.codegym.furama_case_study_final.dto.CustomerDetail;
+import com.codegym.furama_case_study_final.dto.CustomerInUsing;
 import com.codegym.furama_case_study_final.model.Customer;
 import com.codegym.furama_case_study_final.model.CustomerType;
 import org.springframework.data.domain.Page;
@@ -15,4 +17,6 @@ public interface ICustomerService {
     void update(Customer customer);
     Customer findById(Long id);
     Page<Customer> search(Pageable pageable, String name, String gender, String typeCustomer);
+    List<CustomerInUsing> showList(int page, int size);
+    List<CustomerDetail> showListDetail(Long id);
 }

@@ -1,5 +1,7 @@
 package com.codegym.furama_case_study_final.service.imp;
 
+import com.codegym.furama_case_study_final.dto.CustomerDetail;
+import com.codegym.furama_case_study_final.dto.CustomerInUsing;
 import com.codegym.furama_case_study_final.model.Customer;
 import com.codegym.furama_case_study_final.repository.ICustomerRepository;
 import com.codegym.furama_case_study_final.service.ICustomerService;
@@ -47,5 +49,15 @@ public class CustomerServiceImp implements ICustomerService {
     @Override
     public Page<Customer> search(Pageable pageable, String name, String gender, String typeCustomer) {
         return customerRepository.search(pageable, "%" + name +"%", "%" + gender +"%", "%" + typeCustomer +"%");
+    }
+
+    @Override
+    public List<CustomerInUsing> showList(int page, int size) {
+        return customerRepository.showList(page, size);
+    }
+
+    @Override
+    public List<CustomerDetail> showListDetail(Long id) {
+        return customerRepository.showListDetail(id);
     }
 }

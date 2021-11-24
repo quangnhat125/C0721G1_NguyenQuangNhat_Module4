@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/customer/layout :: head"></head>
+<body>
+<div th:replace="/customer/layout :: navbar"></div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Contract ID</th>
+        <th scope="col">Service ID</th>
+        <th scope="col">Customer Name</th>
+        <th scope="col">Detail</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="cusInUse : ${newCustomerList}">
+        <td th:text="${cusInUse.getContract()}"></td>
+        <td th:text="${cusInUse.getService()}"></td>
+        <td th:text="${cusInUse.getCustomerName()}"></td>
+        <td>
+            <button th:onclick="|showDetail(${cusInUse.getCustomerId()})|" class="btn btn-primary" type="button">Detail
+            </button>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--<div>-->
+<!--    <a th:href="@{'/customer'(page = ${customer.number - 1})}"-->
+<!--       th:if="${customer.hasPrevious()}">Previous Page</a>-->
+<!--    <span th:text="${customer.number + 1}"></span> / <span th:text="${customer.totalPages}"></span>-->
+<!--    <a th:href="@{'/customer'(page = ${customer.number + 1})}"-->
+<!--       th:if="${customer.hasNext()}">Next Page</a>-->
+<!--</div>-->
+
+<!-- Modal DETAIL-->
+<div class="modal fade" id="detail" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="tableDetail">
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div th:replace="/customer/layout :: script"></div>
+<script>
+    function showModalDetail() {
+        $('#detail').modal('show');
+    }
+
+    function hideModalDetail() {
+        $('#detail').modal('hide');
+    }
+
+    function showDetail(id) {
+        $.ajax({
+            headers: {
+                'Accept': "application/json", // produces nhận về
+                'Content-Type': "application/json" //consumes gửi đi
+            },
+            type: "GET",
+            // data: JSON.stringify(json),
+            url: "/customer/detail/" + id,
+            success: function (customerDetailList) {
+                let cont = '    <tr>\n' +
+                    '        <td>Number</td>\n' +
+                    '        <td>Customer Code</td>\n' +
+                    '        <td>Attach Service</td>\n' +
+                    '        <td>Quantity</td>\n' +
+                    '        <td>Attach Cost</td>\n' +
+                    '        <td>Total</td>\n' +
+                    '    </tr>';
+
+                for (let i = 0; i < customerDetailList.length; i++) {
+                    cont += getDetail(i, customerDetailList[i])
+                }
+
+                document.getElementById("tableDetail").innerHTML = cont
+                $('#detail').modal('show');
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+    function getDetail(index, customer) {
+        return `<tr>
+        <td>${index + 1}</td>
+        <td>${customer.code}</td>
+        <td>${customer.attachname}</td>
+        <td>${customer.quantity}</td>
+        <td>${customer.attachcost}</td>
+        <td>${customer.total}</td>
+        </tr>`
+    }
+
+</script>
+</body>
+</html>

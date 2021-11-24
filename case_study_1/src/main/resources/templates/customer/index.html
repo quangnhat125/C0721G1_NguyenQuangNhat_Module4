@@ -5,7 +5,7 @@
 <body>
 <div th:replace="/customer/layout :: navbar"></div>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
     <tr>
         <th scope="col">Customer Code</th>
@@ -124,7 +124,6 @@
 <script>
     function onDelete(id) {
         document.getElementById("idCustomer").value = id;
-        alert(id)
     }
 
     function onSearch() {

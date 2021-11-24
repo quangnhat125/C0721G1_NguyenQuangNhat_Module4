@@ -24,6 +24,7 @@
 <button onclick="showModalSearch()">Search</button>
 <button onclick="showMore()">Show More</button>
 <button onclick="searchProduct()">Show List</button>
+
 <br>
 <!--<ul class="pagination">-->
 <!--    <li class="page-item"><a class="page-link" th:if="${page}!=0"-->
@@ -179,7 +180,11 @@
         </div>
     </div>
 </div>
+<table id="tableDetail">
+
+</table>
 <script>
+
 
     function hideModalSearch() {
         $('#modalSearch').modal('hide');
@@ -224,7 +229,7 @@
             success: function () {
                 alert("Add Completed!")
                 hideModalCreate();
-                getList();
+               searchProduct()
             },
             error: function (err) {
 
@@ -264,12 +269,59 @@
 
     function getProduct(product) {
         return `<tr><th>${product.id}</th> <th>${product.productName}</th> <th>${product.price}</th> <th>${product.description}</th>
-                   <th>${product.producer}</th> <th>${product.category.name}</th> <th><button onclick="edit(${product.id})">Edit</button></th> <th><button onclick="deleteProduct(${product.id})">Delete</button></th></tr>`
+                   <th>${product.producer}</th> <th>${product.category.name}</th> <th><button onclick="edit(${product.id})">Edit</button></th> <th><button onclick="deleteProduct(${product.id})">Delete</button></th><th><button onclick="getDetail(${product.id})">Detail</button> </th></tr>`
+    }
+
+    function getDetail(id) {
+        $('#tableDetail').show();
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "GET",
+            // data: JSON.stringify(),
+            url: "/api/detail/" + id,
+            success: function (product) {
+                let cont = "<tr>" +
+                    "<th>Number</th>" +
+                    "<th>Product Name</th> " +
+                    "<th>Price</th>" +
+                    "<th>Description</th> " +
+                    "<th>Producer</th>  " +
+                    "<th>Category</th>  " +
+                    "<th >Close</th>  " +
+                    "</tr>"
+
+                    cont += showDetail(product)
+
+                document.getElementById("tableDetail").innerHTML = cont
+            },
+            error: function (err) {
+
+            }
+        })
+    }
+    function closeDetail() {
+        $('#tableDetail').hide();
+    }
+
+    function showDetail(product) {
+        return `<tr>
+    <td>${product.id}</td>
+    <td>${product.productName}</td>
+    <td>${product.price}</td>
+    <td>${product.description}</td>
+    <td>${product.producer}</td>
+    <td>${product.category.name}</td>
+    <td><button onclick='closeDetail()'>Close</button></td>
+        </tr>`
     }
 
     function deleteProduct(id) {
         document.getElementById("deleteId").value = id
         showModalDelete()
+
     }
 
     function del() {
@@ -284,7 +336,7 @@
             url: "/api/delete/" + id,
             success: function () {
                 hideModalDelete()
-                getList()
+               searchProduct()
             },
             error: function (err) {
 
@@ -344,7 +396,7 @@
             url: "/api/update/" + id,
             success: function () {
                 hideModalEdit()
-                getList()
+                searchProduct()
             },
             error: function (err) {
             }
@@ -368,14 +420,14 @@
             url: "/api/search?pId=" + productId + "&pName=" + productName + "&pPrice=" + price + "&pDes=" + des + "&pProducer=" + producer + "&cateId=" + id + "&page=" + page,
             success: function (productList) {
                 hideModalSearch()
-                let content = '<tr><th>ID</th> <th>Name</th> <th>Price</th> <th>Description</th> <th>Producer</th> <th>Category</th> <th>Edit</th> <th>Delete</th></tr>'
+                let content = '<tr><th>ID</th> <th>Name</th> <th>Price</th> <th>Description</th> <th>Producer</th> <th>Category</th> <th>Edit</th> <th>Delete</th><th>Detail</th></tr>'
                 for (let i = 0; i < productList.length; i++) {
                     content += getProduct(productList[i])
                 }
                 document.getElementById('listProduct').innerHTML = content
                 let p = document.getElementById('page').value;
-                alert(typeof(p))
-                // alert(p)
+
+
                 if (p == 0) {
                     $("#previousPage").hide();
                 }
@@ -384,8 +436,7 @@
                 }
                 document.getElementById('pageNumber').innerText = p
                 let totalPage = document.getElementById('totalPage').value
-                alert(p)
-                alert(totalPage)
+
                 if (p == totalPage) {
                     $("#nextPage").hide();
                 }
@@ -401,7 +452,7 @@
     function next() {
         let b = document.getElementById('page').value;
         b = parseInt(b)
-        // alert(typeof(b))
+
         b += 1;
         document.getElementById('page').value = b;
         searchProduct();
@@ -411,13 +462,13 @@
         document.getElementById('page').value = 0;
         let a = document.getElementById('page').value;
 
-        alert(a)
+
     }
 
     function previous() {
         let b = document.getElementById('page').value;
         b = parseInt(b)
-        // alert(typeof(b))
+
         b -= 1;
         document.getElementById('page').value = b;
         searchProduct();

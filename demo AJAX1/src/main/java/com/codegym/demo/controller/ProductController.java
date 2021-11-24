@@ -114,4 +114,9 @@ public class ProductController {
         int totalPage = productList.size() / sizePage;
         return totalPage;
     }
+    @GetMapping("detail/{id}")
+    public ResponseEntity<?> detail(@PathVariable("id") Long id){
+        Product product = productService.findById(id);
+        return new ResponseEntity<>(product, HttpStatus.OK);
+    }
 }
