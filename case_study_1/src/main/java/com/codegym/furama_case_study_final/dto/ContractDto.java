@@ -9,14 +9,17 @@ import org.springframework.validation.Validator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 public class ContractDto implements Validator {
 
     private Long id;
-
+    @Pattern(regexp = "\\d{4}[-]((([0]{1})([1-9]{1}))|(([1]{1})([0-2]{1})))[-]((([0]{1})([1-9]{1}))|(([1-2]{1})([0-9]{1}))|(([3]{1})([0-1]{1})))",
+            message = "Please enter the correct format for birthday 'DD/MM/YYYY'")
     private String startDate;
-
+    @Pattern(regexp = "\\d{4}[-]((([0]{1})([1-9]{1}))|(([1]{1})([0-2]{1})))[-]((([0]{1})([1-9]{1}))|(([1-2]{1})([0-9]{1}))|(([3]{1})([0-1]{1})))",
+            message = "Please enter the correct format for birthday 'DD/MM/YYYY'")
     private String endDate;
     @Min(value = 1, message = "Deposit must be greater than 1!")
     private Double deposit;

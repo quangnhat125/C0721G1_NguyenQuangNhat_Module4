@@ -9,7 +9,7 @@
 <h1 align="center">ADD NEW SERVICE FORM</h1>
 <div align="center">
     <form th:action="@{/service/save}" th:object="${serviceDto}" method="post">
-        <div th:i="${message}" th:text="${message}"/>
+        <div style="color: red" th:i="${message}" th:text="${message}"/>
         <table border="1" cellpadding="5">
             <tr>
                 <th>Service Code</th>

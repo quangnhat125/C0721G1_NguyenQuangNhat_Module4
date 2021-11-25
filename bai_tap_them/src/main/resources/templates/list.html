@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/layout :: navbar"></div>
+<form href="/pig/search">
+    <input name="codeSearch" type="text">
+    <select name="statusSearch">
+        <option value="">None</option>
+        <option value="0">Sold</option>
+        <option value="1">Sell</option>
+    </select>
+    <select name="country">
+        <option value="">None</option>
+        <option th:each="c : ${countryList}" th:text="${c.countryName}" th:value="${c.id}"></option>
+    </select>
+    <button type="submit">Search</button>
+</form>
+<table>
+    <tr>
+        <th>Order</th>
+        <th>Pig Code</th>
+        <th>Import Time</th>
+        <th>Import Kg</th>
+        <th>Export Time</th>
+        <th>Export Kg</th>
+        <th>Origin Country</th>
+        <th>Status</th>
+        <th>Detail</th>
+        <th>Delete</th>
+    </tr>
+    <tr th:each="p,index : ${pigList}">
+        <td th:text="${index.count}"></td>
+        <td th:text="${p.pigCode}"></td>
+        <td th:text="${p.importTime}"></td>
+        <td th:text="${p.importKg}"></td>
+        <td th:text="${p.exportTime}"></td>
+        <td th:text="${p.exportKg}"></td>
+        <td th:text="${p.country.countryName}"></td>
+        <td th:if="${p.status == 0}" th:text="Sold"></td>
+        <td th:if="${p.status == 1}">
+            <button>Sell</button>
+        </td>
+        <td>
+            <form action="/pig/detail">
+                <input type="hidden" name="idDetail" th:value="${p.id}">
+                <button type="submit">Detail</button>
+            </form>
+        </td>
+        <td>
+            <button th:onclick="|onDelete(${p.id})|" type="button" class="btn btn-primary btn-lg" data-toggle="modal"
+                    data-target="#modelId">
+                Delete
+            </button>
+        </td>
+    </tr>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you want to delete?
+            </div>
+            <div class="modal-footer">
+                <form action="/pig/delete">
+                    <input type="hidden" id="idPig" name="idPig">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<button onclick="getTop()">Top 3</button>
+<table id="tableTop">
+
+</table>
+<div>
+    <a th:href="@{'/pig'(page = ${pigList.number - 1})}"
+       th:if="${pigList.hasPrevious()}">Previous Page</a>
+    <span th:text="${pigList.number + 1}"></span> / <span th:text="${pigList.totalPages}"></span>
+    <a th:href="@{'/pig'(page = ${pigList.number + 1})}"
+       th:if="${pigList.hasNext()}">Next Page</a>
+</div>
+<div th:replace="/layout :: script"></div>
+<script>
+    function onDelete(id) {
+        alert(id)
+        document.getElementById("idPig").value = id;
+    }
+
+    function getTop() {
+        $.ajax({
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': "application/json"
+            },
+            type: "GET",
+
+            url: "/pig/get-top/",
+            success: function (pigList) {
+                let cont = '<tr> \n' +
+                    '<th>Top</th>' +
+                    '<th>Pig Code</th>' +
+                    '<th>Import Time</th> \n' +
+                    '<th>Import KG</th> \n' +
+                    '<th>Export Time</th> \n' +
+                    '<th>Export KG</th> \n ' +
+                    '<th>Country</th> </tr>'
+                for (let i = 0; i < pigList.length; i++) {
+                    cont += getList(i, pigList[i])
+                }
+                document.getElementById("tableTop").innerHTML = cont
+            },
+
+            error: function (err) {
+            }
+        })
+    }
+
+    function getList(index, pig) {
+        return `<tr>
+<td>${index + 1}</td>
+<td>${pig.pigCode}</td>
+<td>${pig.importTime}</td>
+<td>${pig.importKg}</td>
+<td>${pig.exportTime}</td>
+<td>${pig.exportKg}</td>
+<td>${pig.country.countryName}</td></tr>`
+    }
+
+    // function getCode(code) {
+    //     alert(code)
+    //
+    // }
+</script>
+</body>
+</html>

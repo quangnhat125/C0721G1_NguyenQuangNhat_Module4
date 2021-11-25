@@ -9,7 +9,7 @@
 <h1 align="center">ADD NEW EMPLOYEE FORM</h1>
 <div align="center">
     <form th:action="@{/employee/save}" th:object="${employeeDto}" method="post">
-        <div th:i="${message}" th:text="${message}"/>
+        <div style="color: red" th:i="${message}" th:text="${message}"/>
         <table border="1" cellpadding="5">
             <tr>
                 <th>Employee Name</th>

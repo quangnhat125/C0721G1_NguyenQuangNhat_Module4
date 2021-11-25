@@ -9,7 +9,7 @@
 <h1 align="center">ADD NEW CONTRACT FORM</h1>
 <div align="center">
     <form th:action="@{/contract/save}" th:object="${contractDto}" method="post">
-        <div th:i="${message}" th:text="${message}"/>
+        <div style="color: red" th:if="${message}" th:text="${message}"/>
         <table border="1" cellpadding="5">
             <tr>
                 <th>Start Date</th>

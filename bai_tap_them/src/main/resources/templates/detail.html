@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="/layout :: navbar"></div>
+<h1 align="center">UPDATE CUSTOMER FORM</h1>
+<div align="center">
+    <form th:action="@{/pig/update}" th:object="${pigDto}" method="post">
+        <div style="color: red" th:i="${message}" th:text="${message}"/>
+        <table border="1" cellpadding="5">
+                <input type="hidden" th:field="*{id}" th:value="*{id}">
+                <input type="hidden" th:field="*{status}">
+            <tr>
+                <th>Pig Code</th>
+                <td>
+                    <input type="text" id="pigCode" th:field="*{pigCode}" size="15"/>
+                </td>
+                <td style="color: red" th:if="${#fields.hasErrors('pigCode')}" th:errors="*{pigCode}"></td>
+            </tr>
+            <tr>
+                <th>Import Time:</th>
+                <td>
+                    <input type="date" th:field="*{importTime}"   />
+                </td>
+                <td style="color: red" th:if="${#fields.hasErrors('importTime')}" th:errors="*{importTime}"></td>
+            </tr>
+            <tr>
+                <th>Import Kg:</th>
+                <td>
+                    <input type="text" th:field="*{importKg}" size="45" />
+                </td>
+                <td style="color: red" th:if="${#fields.hasErrors('importKg')}" th:errors="*{importKg}"></td>
+            </tr>
+
+            <tr>
+                <th>Export Time</th>
+                <td>
+                    <input type="date" th:field="*{exportTime}" />
+                </td>
+                <td style="color: red" th:if="${#fields.hasErrors('exportTime')}" th:errors="*{exportTime}"></td>
+            </tr>
+            <tr>
+                <th>Export Kg</th>
+                <td>
+                    <input type="text" th:field="*{exportKg}"  size="45" />
+                </td>
+                <td style="color: red" th:if="${#fields.hasErrors('exportKg')}" th:errors="*{exportKg}"></td>
+            </tr>
+            <tr>
+                <th>Origin Country</th>
+                <td>
+                    <select th:field="*{country}" class="form-select" name="customer_type_id"
+                            aria-label="Default select example" required>
+                        <option th:each="type : ${countryList}" th:text="${type.countryName}"
+                                th:value="${type.id}"></option>
+                        </th:each>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input class="bg-success" type="submit" value="Update"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <a href="/pig"> <button>Go back</button></a>
+</div>
+<div th:replace="layout :: script"></div>
+</body>
+</html>

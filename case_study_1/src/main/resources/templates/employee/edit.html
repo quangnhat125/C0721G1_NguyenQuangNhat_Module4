@@ -9,7 +9,7 @@
 <h1 align="center">UPDATE EMPLOYEE FORM</h1>
 <div align="center">
     <form th:action="@{/employee/update}" th:object="${employeeDto}" method="post">
-        <div th:i="${message}" th:text="${message}"/>
+        <div style="color: red" th:i="${message}" th:text="${message}"/>
         <table border="1" cellpadding="5">
             <tr>
                 <input type="hidden" th:field="*{id}" th:value="*{id}">
